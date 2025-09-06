@@ -69,6 +69,7 @@ const Upload = () => {
               placeholder="Enter the Course Title"
               className="block w-full text-base text-gray-700 border border-gray-300 rounded-lg px-2 py-3"
               value={title}
+              name="title"
               onChange={(e) => setTitle(e.target.value)}
               required
             />
@@ -78,6 +79,7 @@ const Upload = () => {
               type="text"
               placeholder="Enter the Course Code"
               className="block w-full text-base text-gray-700 border border-gray-300 rounded-lg px-2 py-3"
+              name="code"
               value={courseCode}
               onChange={(e) => setCourseCode(e.target.value)}
               required
@@ -88,6 +90,7 @@ const Upload = () => {
               type="text"
               placeholder="Enter the Year You’re uploading this note"
               className="block w-full text-base text-gray-700 border border-gray-300 rounded-lg px-2 py-3"
+              name="year"
               value={year}
               onChange={(e) => setYear(e.target.value)}
               required

@@ -44,15 +44,17 @@ export default function Home() {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 mx-auto lg:grid-cols-4 gap-6 max-w-6xl ">
+          <>
             {notes.length > 0 ? (
-              notes.map((note, i) => <NoteCard key={i} note={note} />)
+              <div className="grid grid-cols-2 md:grid-cols-3 mx-auto lg:grid-cols-4 gap-6 max-w-6xl ">
+                {notes.map((note, i) => (
+                  <NoteCard key={i} note={note} />
+                ))}
+              </div>
             ) : (
-              <p className="text-center text-gray-500 w-full">
-                No notes uploaded yet.
-              </p>
+              <p className="text-gray-500 w-full">No notes uploaded yet.</p>
             )}
-          </div>
+          </>
         )}
       </section>
       <Footer />

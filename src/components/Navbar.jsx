@@ -33,6 +33,7 @@ export default function Navbar() {
             <input
               type="text"
               placeholder="Search for lecture notes..."
+              name="search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={handleKeyDown}
