@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { fetchNotes } from "../services/notesAPI.js";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import NoteCard from "../components/NoteCard.jsx";
+import NoteCardLoader from "../components/NoteCardLoader.jsx";
 
 export default function SearchPage() {
   const [notes, setNotes] = useState([]);
-  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(true);
   const location = useLocation();
 
   // Extract search query from URL
@@ -17,23 +17,28 @@ export default function SearchPage() {
   useEffect(() => {
     const getNotes = async () => {
       try {
-        const res = await fetchNotes();
-        setNotes(res);
+        setLoading(true);
+        const res = await fetch(
+          `https://apiunibib.onrender.com/api/v1/books?search=${search}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
-        // filter results by query
-        if (search.trim()) {
-          const filtered = res.filter(
-            (note) =>
-              note.title.toLowerCase().includes(search.toLowerCase()) ||
-              note.course.toLowerCase().includes(search.toLowerCase()) ||
-              note.year.toString().includes(search.toLowerCase())
-          );
-          setResults(filtered);
-        } else {
-          setResults(res);
+        if (!res.ok) {
+          throw new Error("Upload failed");
         }
+
+        const data = await res.json();
+
+        setNotes(data.data);
       } catch (err) {
         console.error("Error fetching notes:", err);
+      } finally {
+        setLoading(false);
       }
     };
     getNotes();
@@ -43,19 +48,28 @@ export default function SearchPage() {
     <div className="flex flex-col min-h-screen">
       <Navbar />
 
-      <section className="py-10">
-        <h2 className="text-2xl font-semibold mb-8 mt-8 mx-6">
-          Search Results for <span className="text-indigo-600">"{search}"</span>
+      <section className="py-10 max-w-6xl mx-auto w-full">
+        <h2 className="text-2xl font-semibold mb-8 mt-8 ">
+          Search Results for <span className="text-blue-600">"{search}"</span>
         </h2>
 
-        {/* Notes Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-6xl mx-6">
-          {results.length > 0 ? (
-            results.map((note) => <NoteCard key={note._id} note={note} />)
-          ) : (
-            <p className="text-center text-gray-500 w-full">No results found.</p>
-          )}
-        </div>
+        {loading ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 mx-auto lg:grid-cols-4 gap-6 max-w-6xl ">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <NoteCardLoader key={i} />
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-3 mx-auto lg:grid-cols-4 gap-6 max-w-6xl ">
+            {notes.length > 0 ? (
+              notes.map((note, i) => <NoteCard key={i} note={note} />)
+            ) : (
+              <p className="text-center text-gray-500 w-full">
+                Note not found.
+              </p>
+            )}
+          </div>
+        )}
       </section>
 
       <Footer />

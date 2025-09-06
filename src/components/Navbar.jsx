@@ -20,33 +20,34 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="w-full bg-white shadow-sm px-6 py-3 flex items-center justify-between">
-      {/* Logo */}
-      <Link to="/" className="flex items-center gap-2">
-        <img src={Logo} alt="UniLibrary Logo" className="h-8 w-auto" />
-      </Link>
-
-      {/* Centered search + upload */}
-      <div className="flex items-center justify-center flex-1">
-        <div className="flex items-center w-1/2 max-w-lg relative">
-          <IoSearch className="absolute left-3 text-gray-400 text-lg" />
-          <input
-            type="text"
-            placeholder="Search for lecture notes..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={handleKeyDown}
-            className="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
-          />
-        </div>
-
-        {/* Upload Button */}
-        <Link
-          to="/upload"
-          className="ml-4 bg-indigo-600 text-white px-10 py-2 rounded-lg hover:bg-indigo-700 text-sm font-medium"
-        >
-          Upload
+    <nav className="w-full  bg-white shadow-sm px-6 py-3 flex items-center justify-between">
+      <div className="max-w-6xl mx-auto flex items-center w-full">
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-2">
+          <img src={Logo} alt="UniLibrary Logo" className="h-8 w-auto" />
         </Link>
+        {/* Centered search + upload */}
+        <div className="flex items-center justify-end flex-1">
+          <div className="flex items-center w-1/2 max-w-lg relative">
+            <IoSearch className="absolute left-3 text-gray-400 text-lg" />
+            <input
+              type="text"
+              placeholder="Search for lecture notes..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={handleKeyDown}
+              className="w-full border border-gray-300 rounded-lg pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600"
+            />
+          </div>
+
+          {/* Upload Button */}
+          <Link
+            to="/upload"
+            className="ml-4 bg-blue-600 text-white px-10 py-2 rounded-lg hover:bg-blue-700 text-sm font-medium"
+          >
+            Upload
+          </Link>
+        </div>
       </div>
     </nav>
   );

@@ -1,31 +1,57 @@
-// src/services/notesAPI.js
-
 // Simulate fetching notes from backend
 export async function fetchNotes() {
-  return [
-    {
-      id: 1,
-      title: "CSC101 - Introduction to Computing",
-      course: "CSC101",
-      year: "2023",
-      fileUrl: "https://example.com/csc101.pdf",
-    },
-    {
-      id: 2,
-      title: "MTH102 - Calculus Notes",
-      course: "MTH102",
-      year: "2022",
-      fileUrl: "https://example.com/mth102.pdf",
-    },
-  ];
+  try {
+    // Send GET request to backend API
+    const response = await fetch(
+      "https://apiunibib.onrender.com/api/v1/books",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    // Parse JSON response
+    const data = await response.json();
+
+    // Check if response is ok
+    if (response.ok) {
+      return data.data;
+    } else {
+      throw new Error(data.message || "Failed to fetch notes");
+    }
+  } catch (error) {
+    throw new Error(error.message);
+  }
 }
 
 // Simulate uploading to backend
-export async function uploadNote({ title, course, year, file }) {
-  console.log("Uploading note:", { title, course, year, file });
+export async function uploadNote(formData) {
+  try {
+    // Send GET request to backend API
+    const response = await fetch(
+      "https://apiunibib.onrender.com/api/v1/books",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: formData,
+      }
+    );
 
-  // Here, your backend guy will replace this with real upload logic
-  return new Promise((resolve) => {
-    setTimeout(() => resolve({ success: true }), 1500);
-  });
+    // Parse JSON response
+    const data = await response.json();
+
+    // Check if response is ok
+    if (response.ok) {
+      return data.data;
+    } else {
+      throw new Error(data.message || "Failed to upload note");
+    }
+  } catch (error) {
+    console.error("Failed to upload note:", error);
+    return null;
+  }
 }
