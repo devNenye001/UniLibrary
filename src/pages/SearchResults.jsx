@@ -48,13 +48,13 @@ export default function SearchPage() {
     <div className="flex flex-col min-h-screen">
       <Navbar />
 
-      <section className="py-10 max-w-6xl mx-auto w-full">
-        <h2 className="text-2xl font-semibold mb-8 mt-8 ">
+      <section className="py-10 w-full">
+        <h2 className="text-2xl font-semibold mb-8 mt-8 max-w-[1200px] mx-auto px-6">
           Search Results for <span className="text-blue-600">"{search}"</span>
         </h2>
 
         {loading ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 mx-auto lg:grid-cols-4 gap-6 max-w-6xl ">
+          <div className="grid grid-cols-2 md:grid-cols-3 mx-auto lg:grid-cols-4 gap-6 max-w-[1200px] px-6 ">
             {Array.from({ length: 8 }).map((_, i) => (
               <NoteCardLoader key={i} />
             ))}
@@ -62,7 +62,7 @@ export default function SearchPage() {
         ) : (
           <>
             {notes.length > 0 ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 mx-auto lg:grid-cols-4 gap-6 max-w-6xl ">
+              <div className="grid grid-cols-2 md:grid-cols-3 mx-auto lg:grid-cols-4 gap-6 max-w-[1200px] px-6 ">
                 {notes.map((note, i) => (
                   <NoteCard key={i} note={note} />
                 ))}

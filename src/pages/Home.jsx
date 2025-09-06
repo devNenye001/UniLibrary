@@ -38,7 +38,7 @@ export default function Home() {
         </h1>
         {/* Notes Grid */}
         {loading ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 mx-auto lg:grid-cols-4 gap-6 max-w-6xl ">
+          <div className="grid grid-cols-2 md:grid-cols-3 mx-auto lg:grid-cols-4 gap-6 max-w-[1200px] px-6 ">
             {Array.from({ length: 8 }).map((_, i) => (
               <NoteCardLoader key={i} />
             ))}
@@ -46,7 +46,7 @@ export default function Home() {
         ) : (
           <>
             {notes.length > 0 ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 mx-auto lg:grid-cols-4 gap-6 max-w-6xl ">
+              <div className="grid grid-cols-2 md:grid-cols-3 mx-auto lg:grid-cols-4 gap-6 max-w-[1200px] px-6">
                 {notes.map((note, i) => (
                   <NoteCard key={i} note={note} />
                 ))}

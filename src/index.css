@@ -1,1 +1,13 @@
 @import "tailwindcss";
+
+@layer base {
+  input::placeholder,
+  textarea::placeholder {
+    @apply text-gray-700; /* or text-gray-500 / any color */
+  }
+
+  input,
+  textarea {
+    @apply bg-white;
+  }
+}
