@@ -1,18 +1,22 @@
-// src/pages/ReadBook.jsx
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+import { motion as Motion, AnimatePresence } from "framer-motion";
+import { IoArrowBack, IoDownloadOutline } from "react-icons/io5";
+import Footer from "../components/Footer";
 
 export default function ReadBook() {
   const [book, setBook] = useState(null);
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
   const { id } = useParams();
 
   useEffect(() => {
     const fetchBook = async () => {
       setLoading(true);
       setError(null);
+
       try {
         const [blob, data] = await Promise.all([
           fetch(`https://apiunibib.onrender.com/api/v1/books/${id}/read`).then(
@@ -29,13 +33,8 @@ export default function ReadBook() {
           ),
         ]);
 
-        // Create URL for PDF blob
-        const url = URL.createObjectURL(blob);
-
-        // Update state
-        setUrl(url);
-
-        // Set book metadata
+        const pdfUrl = URL.createObjectURL(blob);
+        setUrl(pdfUrl);
         setBook(data.data);
       } catch (err) {
         setError(err.message);
@@ -47,94 +46,146 @@ export default function ReadBook() {
     fetchBook();
   }, [id]);
 
-  const downloadPdf = async (url, filename) => {
-    const res = await fetch(url);
-    const blob = await res.blob();
-    const href = URL.createObjectURL(blob);
-
+  const downloadPdf = (url, filename) => {
     const link = document.createElement("a");
-    link.href = href;
-    link.download = filename; // force download instead of opening in new tab
+    link.href = url;
+    link.download = filename;
     document.body.appendChild(link);
     link.click();
-
-    // cleanup
     document.body.removeChild(link);
-    URL.revokeObjectURL(href);
+
+    setShowPopup(true);
   };
+
+  /* -------------------- STATES -------------------- */
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-gray-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent"></div>
+      <div className="flex items-center justify-center h-screen bg-[#f8fafc]">
+        <div className="relative">
+          <div className="w-16 h-16 border-4 border-blue-100 rounded-full"></div>
+          <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin absolute top-0"></div>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex items-center justify-center h-screen bg-gray-50">
-        <p className="text-red-500 font-medium">⚠️ {error}</p>
+      <div className="flex items-center justify-center h-screen text-red-500">
+        {error}
       </div>
     );
   }
 
+  if (!book) return null;
+
+  /* -------------------- UI -------------------- */
+
   return (
-    <div className=" bg-gray-100 flex flex-col">
+    <div className="min-h-screen bg-[#f8fafc] font-['DM_Sans'] flex flex-col">
       {/* Header */}
-      <header className="bg-white shadow">
-        <div className="max-w-6xl mx-auto  py-4 flex justify-between items-center">
-          <h1 className="text-xl font-bold">📄 {book.title}</h1>
-          <span className="text-sm text-gray-500">
-            {book.courseCode} • {book.year} level
-          </span>
+      <header className="bg-white/80 backdrop-blur-md sticky top-0 z-40 border-b border-blue-50">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+          <div className="flex items-center gap-4">
+            <Link
+              to="/library"
+              className="p-2 hover:bg-blue-50 rounded-full transition-colors text-gray-600"
+            >
+              <IoArrowBack size={20} />
+            </Link>
+
+            <div>
+              <h1 className="text-lg font-semibold text-gray-900 truncate max-w-[200px] md:max-w-md">
+                {book?.title}
+              </h1>
+              <p className="text-[10px] font-semibold text-blue-600 uppercase tracking-widest mt-1">
+                {book?.courseCode} • {book?.year}
+              </p>
+            </div>
+          </div>
+
+          <button
+            onClick={() => downloadPdf(url, `${book?.title}.pdf`)}
+            className="flex items-center gap-2 bg-blue-600 text-white px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-blue-700 transition-all active:scale-95"
+          >
+            <IoDownloadOutline size={18} />
+            <span className="hidden md:inline">Download PDF</span>
+          </button>
         </div>
       </header>
 
-      {/* PDF Viewer */}
-      <main className="flex-1 flex flex-col items-center py-6">
-        <div className="w-full max-w-6xl bg-white shadow-lg rounded-lg overflow-hidden">
-          {/* Book Meta */}
-          <div className="p-6 border-b border-gray-200 flex justify-between items-center">
-            <div>
-              <h2 className="text-xl font-semibold text-gray-800">
-                {book.title}
-              </h2>
-              <p className="text-gray-500 text-sm mt-1">
-                Course Code:{" "}
-                <span className="font-medium">{book.courseCode}</span>
-              </p>
-              <p className="text-gray-500 text-sm">
-                Uploaded: {new Date(book?.createdAt).toLocaleDateString()}
-              </p>
+      {/* Reader */}
+      <main className="flex-grow p-4 md:p-8">
+        <div className="max-w-5xl mx-auto">
+          <Motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white shadow-2xl shadow-blue-900/5 rounded-[2rem] overflow-hidden border border-blue-50"
+          >
+            {/* Metadata */}
+            <div className="px-8 py-4 bg-gray-50/50 border-b border-gray-100 flex justify-between items-center text-[12px] text-gray-500">
+              <span>Uploaded</span>
+              <span>
+                Date Uploaded:{" "}
+                {book?.createdAt
+                  ? new Date(book.createdAt).toLocaleDateString()
+                  : "—"}
+              </span>
             </div>
-            <div className="">
-              <button
-                onClick={() => downloadPdf(url, `${book.title}.pdf`)}
-                className="px-4 cursor-pointer py-2 inline-block bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
-              >
-                Download PDF
-              </button>
-            </div>
-          </div>
 
-          {/* PDF Frame */}
-          <div className="relative bg-gray-50 ">
-            {url && (
-              <embed
-                src={url}
-                type="application/pdf"
-                className="h-[80vh] w-[100%] max-w-[80%] mx-auto"
-              />
-            )}
-          </div>
+            {/* PDF */}
+            <div className="bg-gray-200/30 p-4 md:p-10 flex justify-center">
+              {url && (
+                <embed
+                  src={url}
+                  type="application/pdf"
+                  className="w-full h-[75vh] rounded-xl shadow-2xl border border-white/50"
+                />
+              )}
+            </div>
+          </Motion.div>
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 py-4 text-center text-sm text-gray-500">
-        © {new Date().getFullYear()} UniLibrary — All rights reserved.
-      </footer>
+      {/* Success Popup */}
+      <AnimatePresence>
+        {showPopup && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-blue-900/20 backdrop-blur-sm">
+            <Motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white rounded-[2.5rem] p-10 max-w-sm w-full text-center shadow-2xl border border-white"
+            >
+              <div className="text-5xl mb-6">🎓</div>
+              <h2 className="text-2xl font-semibold mb-3">
+                Found this useful?
+              </h2>
+              <p className="text-gray-500 text-sm mb-8">
+                Help other students by uploading your lecture notes or past
+                questions.
+              </p>
+
+              <Link
+                to="/upload"
+                className="block w-full bg-blue-600 text-white py-4 rounded-2xl font-semibold text-sm hover:bg-blue-700 transition-all shadow-lg shadow-blue-200"
+              >
+                Upload a Resource
+              </Link>
+
+              <button
+                onClick={() => setShowPopup(false)}
+                className="mt-4 text-gray-400 text-xs hover:text-gray-600"
+              >
+                Maybe later
+              </button>
+            </Motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      <Footer />
     </div>
   );
 }
