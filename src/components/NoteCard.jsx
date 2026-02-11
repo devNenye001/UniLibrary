@@ -3,6 +3,7 @@ import { motion as Motion } from "framer-motion";
 
 export default function NoteCard({ note }) {
   const navigate = useNavigate();
+  const format = note?.file?.format || "pdf";
   
   return (
     <Motion.div 
@@ -14,7 +15,7 @@ export default function NoteCard({ note }) {
         <div className="flex flex-col items-center">
           <span className="text-5xl filter drop-shadow-sm">📄</span>
           <span className="text-[10px] font-semibold text-blue-400 mt-2 tracking-widest">
-            {note.file.format.toUpperCase()}
+            {String(format).toUpperCase()}
           </span>
         </div>
       </div>

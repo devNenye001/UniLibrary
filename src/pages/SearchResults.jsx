@@ -7,6 +7,7 @@ import NoteCardLoader from "../components/NoteCardLoader.jsx";
 import PastQuestionCard from "../components/PastQuestionCard.jsx";
 import PastQuestionLoader from "../components/PastQuestionLoader.jsx";
 import { motion as Motion } from "framer-motion";
+import { fetchBooks } from "../services/notesAPI.js";
 
 export default function SearchPage() {
   const [results, setResults] = useState([]);
@@ -20,18 +21,8 @@ export default function SearchPage() {
     const getResults = async () => {
       try {
         setLoading(true);
-        const res = await fetch(
-          `https://apiunibib.onrender.com/api/v1/books?search=${search}`,
-          {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-          }
-        );
-
-        if (!res.ok) throw new Error("Search failed");
-
-        const data = await res.json();
-        setResults(data.data);
+        const data = await fetchBooks({ search });
+        setResults(data);
       } catch (err) {
         console.error("Error fetching results:", err);
       } finally {
@@ -45,7 +36,7 @@ export default function SearchPage() {
     <div className="flex flex-col min-h-screen bg-[#f8fafc] font-['DM_Sans']">
       <Navbar />
 
-      <main className="flex-grow py-12">
+      <main className="grow py-12">
         <div className="max-w-7xl mx-auto px-6">
           {/* Search Header */}
           <div className="mb-12">
@@ -77,7 +68,9 @@ export default function SearchPage() {
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                   {results.map((item, i) => (
                     // Logic to render either Note or PQ Card
-                    item.type === "pq" || item.category === "past-question" ? (
+                    item.type === "pq" ||
+                    item.category === "past-question" ||
+                    ["jpg", "jpeg", "png", "webp", "gif"].includes(item?.file?.format?.toLowerCase?.()) ? (
                       <PastQuestionCard key={i} pq={item} />
                     ) : (
                       <NoteCard key={i} note={item} />

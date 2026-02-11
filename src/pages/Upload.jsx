@@ -4,6 +4,7 @@ import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
 import { motion as Motion, AnimatePresence } from "framer-motion";
 import { IoCloudUploadOutline, IoDocumentTextOutline, IoImageOutline } from "react-icons/io5";
+import { uploadResource } from "../services/notesAPI.js";
 
 const Upload = () => {
   const [activeTab, setActiveTab] = useState("note"); // "note" or "pq"
@@ -27,25 +28,19 @@ const Upload = () => {
     setMessage("");
 
     try {
-      const formData = new FormData();
-      formData.append("title", title);
-      formData.append("courseCode", courseCode);
-      formData.append("year", year);
-      formData.append("file", file);
-      // Logic to tell the backend which type it is
-      formData.append("type", activeTab);
-
-      const res = await fetch("https://apiunibib.onrender.com/api/v1/books", {
-        method: "POST",
-        body: formData,
+      await uploadResource({
+        title,
+        courseCode,
+        year,
+        // no explicit type field; backend treats all as books
+        file, // appended under key "file" in the service
       });
 
-      if (!res.ok) throw new Error("Upload failed");
-
       setMessage("✅ Resource uploaded successfully! Redirecting...");
-      setTimeout(() => navigate("/"), 2500);
-    } catch {
-      setMessage("❌ Error uploading file. Please try again.");
+      setTimeout(() => navigate("/library"), 2500);
+    } catch (err) {
+      console.error("Upload failed:", err);
+      setMessage(`❌ Error uploading file: ${err.message || "Please try again."}`);
     } finally {
       setLoading(false);
     }
@@ -55,7 +50,7 @@ const Upload = () => {
     <div className="flex flex-col min-h-screen bg-[#f8fafc] font-['DM_Sans']">
       <Navbar />
 
-      <main className="flex-grow flex flex-col items-center py-16 px-6">
+      <main className="grow flex flex-col items-center py-16 px-6">
         {/* Header Section */}
         <div className="text-center mb-10">
           <h1 className="text-3xl font-semibold text-gray-900 tracking-tight">
@@ -96,8 +91,15 @@ const Upload = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2 md:col-span-2">
-                <label className="text-xs font-semibold text-gray-400 uppercase tracking-widest ml-1">Title</label>
+                <label
+                  htmlFor="title"
+                  className="text-xs font-semibold text-gray-400 uppercase tracking-widest ml-1"
+                >
+                  Title
+                </label>
                 <input
+                  id="title"
+                  name="title"
                   type="text"
                   placeholder={activeTab === "note" ? "e.g. Intro to Psych Notes" : "e.g. CSC 201 Midterm"}
                   className="block w-full text-base border-transparent rounded-2xl px-5 py-4 bg-blue-50/40 focus:bg-white focus:border-blue-200 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all placeholder:text-gray-300 font-normal"
@@ -108,8 +110,15 @@ const Upload = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-xs font-semibold text-gray-400 uppercase tracking-widest ml-1">Course Code</label>
+                <label
+                  htmlFor="courseCode"
+                  className="text-xs font-semibold text-gray-400 uppercase tracking-widest ml-1"
+                >
+                  Course Code
+                </label>
                 <input
+                  id="courseCode"
+                  name="courseCode"
                   type="text"
                   placeholder="e.g. CSC 201"
                   className="block w-full text-base border-transparent rounded-2xl px-5 py-4 bg-blue-50/40 focus:bg-white focus:border-blue-200 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all placeholder:text-gray-300 font-normal"
@@ -120,8 +129,15 @@ const Upload = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-xs font-semibold text-gray-400 uppercase tracking-widest ml-1">Year</label>
+                <label
+                  htmlFor="year"
+                  className="text-xs font-semibold text-gray-400 uppercase tracking-widest ml-1"
+                >
+                  Year
+                </label>
                 <input
+                  id="year"
+                  name="year"
                   type="text"
                   placeholder="e.g. 2026"
                   className="block w-full text-base border-transparent rounded-2xl px-5 py-4 bg-blue-50/40 focus:bg-white focus:border-blue-200 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all placeholder:text-gray-300 font-normal"
@@ -130,14 +146,20 @@ const Upload = () => {
                   required
                 />
               </div>
+
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs font-semibold text-gray-400 uppercase tracking-widest ml-1">
-                {activeTab === "note" ? "PDF Document" : "Question Image"}
+              <label
+                htmlFor="file"
+                className="text-xs font-semibold text-gray-400 uppercase tracking-widest ml-1"
+              >
+                {activeTab === "note" ? "PDF Document" : "Past Question File"}
               </label>
               <div className="relative group">
                 <input
+                  id="file"
+                  name="file"
                   type="file"
                   accept={activeTab === "note" ? ".pdf" : "image/*"}
                   onChange={(e) => setFile(e.target.files?.[0] || null)}
@@ -147,7 +169,7 @@ const Upload = () => {
                 <div className="border-2 border-dashed border-blue-100 group-hover:border-blue-300 group-hover:bg-blue-50/30 transition-all rounded-2xl p-8 flex flex-col items-center justify-center text-center">
                   <IoCloudUploadOutline size={32} className="text-blue-400 mb-2" />
                   <p className="text-sm font-semibold text-gray-700">
-                    {file ? file.name : `Click to upload ${activeTab === "note" ? 'PDF' : 'Image'}`}
+                    {file ? file.name : `Click to upload ${activeTab === "note" ? "PDF" : "File"}`}
                   </p>
                   <p className="text-xs text-gray-400 mt-1 font-normal">Max size: 10MB</p>
                 </div>

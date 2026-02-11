@@ -202,14 +202,14 @@ export default function LandingPage() {
                 </p>
               </div>
               <div className="order-1 lg:order-2 aspect-video  overflow-hidden flex items-center justify-center italic text-gray-400">
-                <video src="./search.mp4" alt="Search Demo" className="w-full h-full object-cover" controls autoplay />
+                <video src="./search.mp4" alt="Search Demo" className="w-full h-full object-cover" controls autoPlay />
               </div>
             </div>
 
             {/* Step 2 */}
             <div className="grid lg:grid-cols-2 gap-16 items-center">
               <div className="order-1 lg:order-2 aspect-video  overflow-hidden flex items-center justify-center italic text-gray-400">
-                <video src="./preview.mp4" alt="Preview Demo" className="w-full h-full object-cover" controls autoplay />
+                <video src="./preview.mp4" alt="Preview Demo" className="w-full h-full object-cover" controls autoPlay />
               </div>
               <div>
                 <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center font-bold text-xl mb-6">2</div>
@@ -230,7 +230,7 @@ export default function LandingPage() {
                 </p>
               </div>
              <div className="order-1 lg:order-2 aspect-video  overflow-hidden flex items-center justify-center italic text-gray-400">
-                <video src="./upload.mp4" alt="Upload Demo" className="w-full h-full object-cover" controls autoplay />
+                <video src="./upload.mp4" alt="Upload Demo" className="w-full h-full object-cover" controls autoPlay />
               </div>
             </div>
           </div>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchNotes } from "../services/notesAPI.js";
+import { fetchBooks } from "../services/notesAPI.js";
 
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -19,10 +19,17 @@ export default function Home() {
     const getLibraryData = async () => {
       setLoading(true);
       try {
-        const response = await fetchNotes();
+        const books = await fetchBooks();
 
-        setNotes(response.filter(item => item.type !== "pq"));
-        setPastQuestions(response.filter(item => item.type === "pq"));
+        const isImage = (item) => {
+          const format = item?.file?.format?.toLowerCase?.();
+          if (item?.type === "pq" || item?.category === "past-question") return true;
+          if (!format) return false;
+          return ["jpg", "jpeg", "png", "webp", "gif"].includes(format);
+        };
+
+        setNotes(books.filter((item) => !isImage(item)));
+        setPastQuestions(books.filter((item) => isImage(item)));
       } catch (err) {
         console.error("Failed to fetch library data:", err);
       } finally {

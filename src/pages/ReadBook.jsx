@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { motion as Motion, AnimatePresence } from "framer-motion";
 import { IoArrowBack, IoDownloadOutline } from "react-icons/io5";
 import Footer from "../components/Footer";
+import { fetchBookBySlug, getBookReadUrl } from "../services/notesAPI.js";
 
 export default function ReadBook() {
   const [book, setBook] = useState(null);
@@ -18,24 +19,9 @@ export default function ReadBook() {
       setError(null);
 
       try {
-        const [blob, data] = await Promise.all([
-          fetch(`https://apiunibib.onrender.com/api/v1/books/${id}/read`).then(
-            (res) => {
-              if (!res.ok) throw new Error("Failed to read book");
-              return res.blob();
-            }
-          ),
-          fetch(`https://apiunibib.onrender.com/api/v1/books/${id}`).then(
-            (res) => {
-              if (!res.ok) throw new Error("Failed to fetch book metadata");
-              return res.json();
-            }
-          ),
-        ]);
-
-        const pdfUrl = URL.createObjectURL(blob);
-        setUrl(pdfUrl);
-        setBook(data.data);
+        const data = await fetchBookBySlug(id);
+        setBook(data);
+        setUrl(getBookReadUrl(id)); // stream directly
       } catch (err) {
         setError(err.message);
       } finally {
@@ -116,12 +102,12 @@ export default function ReadBook() {
       </header>
 
       {/* Reader */}
-      <main className="flex-grow p-4 md:p-8">
+      <main className="grow p-4 md:p-8">
         <div className="max-w-5xl mx-auto">
           <Motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white shadow-2xl shadow-blue-900/5 rounded-[2rem] overflow-hidden border border-blue-50"
+            className="bg-white shadow-2xl shadow-blue-900/5 rounded-4xl overflow-hidden border border-blue-50"
           >
             {/* Metadata */}
             <div className="px-8 py-4 bg-gray-50/50 border-b border-gray-100 flex justify-between items-center text-[12px] text-gray-500">
@@ -137,9 +123,9 @@ export default function ReadBook() {
             {/* PDF */}
             <div className="bg-gray-200/30 p-4 md:p-10 flex justify-center">
               {url && (
-                <embed
+                <iframe
                   src={url}
-                  type="application/pdf"
+                  title={book?.title || "Book preview"}
                   className="w-full h-[75vh] rounded-xl shadow-2xl border border-white/50"
                 />
               )}
@@ -151,7 +137,7 @@ export default function ReadBook() {
       {/* Success Popup */}
       <AnimatePresence>
         {showPopup && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-blue-900/20 backdrop-blur-sm">
+          <div className="fixed inset-0 z-100 flex items-center justify-center p-6 bg-blue-900/20 backdrop-blur-sm">
             <Motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
