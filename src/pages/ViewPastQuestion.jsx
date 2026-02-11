@@ -3,11 +3,10 @@ import { useParams, Link } from "react-router-dom";
 import { motion as Motion, AnimatePresence } from "framer-motion";
 import { IoArrowBack, IoDownloadOutline, IoExpandOutline } from "react-icons/io5";
 import Footer from "../components/Footer";
-import { fetchBookBySlug, getBookReadUrl } from "../services/notesAPI.js";
+import { fetchBookBySlug } from "../services/notesAPI.js";
 
 export default function ViewPastQuestion() {
   const [pq, setPq] = useState(null);
-  const [streamUrl, setStreamUrl] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
@@ -20,7 +19,6 @@ export default function ViewPastQuestion() {
       try {
         const data = await fetchBookBySlug(id);
         setPq(data);
-        setStreamUrl(getBookReadUrl(id)); // stream directly
       } catch (err) {
         setError(err.message);
       } finally {
@@ -80,7 +78,12 @@ export default function ViewPastQuestion() {
           </div>
           
           <button
-            onClick={() => downloadImage(streamUrl || pq?.image || pq?.previewUrl, `${pq?.courseCode}-PQ.jpg`)}
+            onClick={() =>
+              downloadImage(
+                pq?.image?.url || pq?.previewUrl,
+                `${pq?.courseCode}-PQ.jpg`
+              )
+            }
             className="flex items-center gap-2 bg-blue-600 text-white px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-blue-700 shadow-lg transition-all active:scale-95"
           >
             <IoDownloadOutline size={18} />
@@ -109,7 +112,7 @@ export default function ViewPastQuestion() {
             {/* Image Container */}
             <div className="bg-gray-100/50 p-4 md:p-8 flex justify-center group relative">
               <img 
-                src={streamUrl || pq?.image || pq?.previewUrl} 
+                src={pq?.image?.url || pq?.previewUrl} 
                 alt="Past Question Content"
                 className="max-w-full h-auto rounded-xl shadow-xl border border-white"
               />
