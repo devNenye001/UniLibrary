@@ -1,207 +1,211 @@
-import { useState } from "react";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion as Motion, AnimatePresence } from "framer-motion";
-import { IoCloudUploadOutline, IoDocumentTextOutline, IoImageOutline } from "react-icons/io5";
-import { uploadResource } from "../services/notesAPI.js";
+import { IoCloudUploadOutline } from "react-icons/io5";
+import Footer from "../components/layouts/Footer.jsx";
+import Navbar from "../components/layouts/Navbar.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
+import { uploadDocument } from "../services/api.js";
 
-const Upload = () => {
-  const [activeTab, setActiveTab] = useState("note"); // "note" or "pq"
-  const [title, setTitle] = useState("");
-  const [courseCode, setCourseCode] = useState("");
-  const [year, setYear] = useState("");
-  const [file, setFile] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+const initialForm = {
+  title: "",
+  courseCode: "",
+  department: "",
+  level: "",
+  year: "",
+  type: "Lecture Note",
+  description: "",
+  file: null,
+};
+
+export default function Upload() {
   const navigate = useNavigate();
+  const { user, role } = useAuth();
+  const [form, setForm] = useState(initialForm);
+  const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
+  const [status, setStatus] = useState({ type: "", message: "" });
 
+  useEffect(() => {
+    document.title = "UniLibrary | Upload";
+  }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!file) {
-      setMessage("⚠️ Please select a file before uploading.");
-      return;
+  const validate = () => {
+    const nextErrors = {};
+
+    ["title", "courseCode", "department", "level", "year", "description"].forEach((field) => {
+      if (!String(form[field]).trim()) {
+        nextErrors[field] = "This field is required.";
+      }
+    });
+
+    if (!form.file) {
+      nextErrors.file = "Please choose a file to upload.";
     }
 
-    setLoading(true);
-    setMessage("");
+    setErrors(nextErrors);
+    return Object.keys(nextErrors).length === 0;
+  };
+
+  const handleChange = (event) => {
+    const { name, value, files } = event.target;
+    setForm((current) => ({
+      ...current,
+      [name]: files ? files[0] : value,
+    }));
+    setErrors((current) => ({ ...current, [name]: "" }));
+    setStatus({ type: "", message: "" });
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (!validate()) return;
+
+    setSubmitting(true);
+    setStatus({ type: "", message: "" });
 
     try {
-      await uploadResource({
-        title,
-        courseCode,
-        year,
-        // no explicit type field; backend treats all as books
-        file, // appended under key "file" in the service
+      await uploadDocument({
+        ...form,
+        uploadedBy: user?.name || "Lecturer",
+        role,
+        tags: [form.courseCode, form.department, form.type.toLowerCase()],
       });
 
-      setMessage("✅ Resource uploaded successfully! Redirecting...");
-      setTimeout(() => navigate("/library"), 2500);
-    } catch (err) {
-      console.error("Upload failed:", err);
-      setMessage(`❌ Error uploading file: ${err.message || "Please try again."}`);
+      setStatus({
+        type: "success",
+        message: "Document uploaded successfully. Redirecting to the dashboard...",
+      });
+      setForm(initialForm);
+      setTimeout(() => navigate("/dashboard"), 1200);
+    } catch (uploadError) {
+      setStatus({
+        type: "error",
+        message: uploadError.message || "Upload failed. Please try again.",
+      });
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#f8fafc] font-['DM_Sans']">
+    <div className="min-h-screen bg-slate-50">
       <Navbar />
+      <main className="mx-auto max-w-5xl px-6 py-10">
+        <section className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm">
+          <div className="max-w-3xl">
+            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-400">Upload Portal</p>
+            <h1 className="mt-3 text-4xl font-semibold text-slate-900">Contribute new academic documents</h1>
+            <p className="mt-4 text-sm leading-7 text-slate-500">
+              Lecturers and admins can upload lecture notes, study guides, and past questions to expand the UniLibrary knowledge base.
+            </p>
+          </div>
 
-      <main className="grow flex flex-col items-center py-16 px-6">
-        {/* Header Section */}
-        <div className="text-center mb-10">
-          <h1 className="text-3xl font-semibold text-gray-900 tracking-tight">
-            Share Your Knowledge
-          </h1>
-          <p className="text-gray-500 mt-2 font-normal">
-            Help fellow students by contributing to the library.
-          </p>
-        </div>
-
-        {/* Segmented Toggle */}
-        <div className="bg-white p-1.5 rounded-2xl shadow-sm border border-blue-50 flex gap-1 mb-12 w-full max-w-md">
-          <button
-            onClick={() => setActiveTab("note")}
-            className={`flex-1 py-3 px-4 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
-              activeTab === "note" ? "bg-blue-600 text-white shadow-lg shadow-blue-200" : "text-gray-500 hover:bg-blue-50"
-            }`}
-          >
-            <IoDocumentTextOutline size={18} />
-            Lecture Note
-          </button>
-          <button
-            onClick={() => setActiveTab("pq")}
-            className={`flex-1 py-3 px-4 rounded-xl text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
-              activeTab === "pq" ? "bg-blue-600 text-white shadow-lg shadow-blue-200" : "text-gray-500 hover:bg-blue-50"
-            }`}
-          >
-            <IoImageOutline size={18} />
-            Past Question
-          </button>
-        </div>
-
-        {/* Form Card */}
-        <Motion.div 
-          layout
-          className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-2xl shadow-blue-900/5 border border-blue-50 w-full max-w-2xl"
-        >
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2 md:col-span-2">
-                <label
-                  htmlFor="title"
-                  className="text-xs font-semibold text-gray-400 uppercase tracking-widest ml-1"
-                >
-                  Title
-                </label>
-                <input
-                  id="title"
-                  name="title"
-                  type="text"
-                  placeholder={activeTab === "note" ? "e.g. Intro to Psych Notes" : "e.g. CSC 201 Midterm"}
-                  className="block w-full text-base border-transparent rounded-2xl px-5 py-4 bg-blue-50/40 focus:bg-white focus:border-blue-200 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all placeholder:text-gray-300 font-normal"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label
-                  htmlFor="courseCode"
-                  className="text-xs font-semibold text-gray-400 uppercase tracking-widest ml-1"
-                >
-                  Course Code
-                </label>
-                <input
-                  id="courseCode"
-                  name="courseCode"
-                  type="text"
-                  placeholder="e.g. CSC 201"
-                  className="block w-full text-base border-transparent rounded-2xl px-5 py-4 bg-blue-50/40 focus:bg-white focus:border-blue-200 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all placeholder:text-gray-300 font-normal"
-                  value={courseCode}
-                  onChange={(e) => setCourseCode(e.target.value)}
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label
-                  htmlFor="year"
-                  className="text-xs font-semibold text-gray-400 uppercase tracking-widest ml-1"
-                >
-                  Year
-                </label>
-                <input
-                  id="year"
-                  name="year"
-                  type="text"
-                  placeholder="e.g. 2026"
-                  className="block w-full text-base border-transparent rounded-2xl px-5 py-4 bg-blue-50/40 focus:bg-white focus:border-blue-200 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all placeholder:text-gray-300 font-normal"
-                  value={year}
-                  onChange={(e) => setYear(e.target.value)}
-                  required
-                />
-              </div>
-
+          <form className="mt-8 grid gap-5" onSubmit={handleSubmit} noValidate>
+            <div className="grid gap-5 md:grid-cols-2">
+              <Field label="Document title" name="title" value={form.title} onChange={handleChange} error={errors.title} />
+              <Field label="Course code" name="courseCode" value={form.courseCode} onChange={handleChange} error={errors.courseCode} />
             </div>
 
-            <div className="space-y-2">
-              <label
-                htmlFor="file"
-                className="text-xs font-semibold text-gray-400 uppercase tracking-widest ml-1"
-              >
-                {activeTab === "note" ? "PDF Document" : "Past Question File"}
+            <div className="grid gap-5 md:grid-cols-3">
+              <Field label="Department" name="department" value={form.department} onChange={handleChange} error={errors.department} />
+              <Field label="Level" name="level" value={form.level} onChange={handleChange} error={errors.level} />
+              <Field label="Academic year" name="year" value={form.year} onChange={handleChange} error={errors.year} />
+            </div>
+
+            <div className="grid gap-5 md:grid-cols-[0.6fr_1.4fr]">
+              <div>
+                <label className="mb-2 block text-sm font-medium text-slate-700" htmlFor="type">
+                  Document type
+                </label>
+                <select
+                  className="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-campus-600 focus:ring-4 focus:ring-campus-100"
+                  id="type"
+                  name="type"
+                  onChange={handleChange}
+                  value={form.type}
+                >
+                  <option>Lecture Note</option>
+                  <option>Past Question</option>
+                  <option>Study Guide</option>
+                </select>
+              </div>
+              <div>
+                <label className="mb-2 block text-sm font-medium text-slate-700" htmlFor="description">
+                  Description
+                </label>
+                <textarea
+                  className="min-h-32 w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-campus-600 focus:ring-4 focus:ring-campus-100"
+                  id="description"
+                  name="description"
+                  onChange={handleChange}
+                  placeholder="Describe the document and what it covers."
+                  value={form.description}
+                />
+                {errors.description ? <p className="mt-2 text-sm text-rose-600">{errors.description}</p> : null}
+              </div>
+            </div>
+
+            <div>
+              <label className="mb-2 block text-sm font-medium text-slate-700" htmlFor="file">
+                File upload
               </label>
-              <div className="relative group">
-                <input
-                  id="file"
-                  name="file"
-                  type="file"
-                  accept={activeTab === "note" ? ".pdf" : "image/*"}
-                  onChange={(e) => setFile(e.target.files?.[0] || null)}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                  required
-                />
-                <div className="border-2 border-dashed border-blue-100 group-hover:border-blue-300 group-hover:bg-blue-50/30 transition-all rounded-2xl p-8 flex flex-col items-center justify-center text-center">
-                  <IoCloudUploadOutline size={32} className="text-blue-400 mb-2" />
-                  <p className="text-sm font-semibold text-gray-700">
-                    {file ? file.name : `Click to upload ${activeTab === "note" ? "PDF" : "File"}`}
-                  </p>
-                  <p className="text-xs text-gray-400 mt-1 font-normal">Max size: 10MB</p>
-                </div>
-              </div>
+              <label className="flex cursor-pointer flex-col items-center justify-center rounded-[1.75rem] border border-dashed border-campus-300 bg-campus-50 px-6 py-10 text-center transition hover:bg-campus-100" htmlFor="file">
+                <IoCloudUploadOutline className="text-4xl text-campus-700" />
+                <p className="mt-4 text-base font-semibold text-slate-900">
+                  {form.file ? form.file.name : "Choose a file to upload"}
+                </p>
+                <p className="mt-2 text-sm text-slate-500">
+                  PDF, DOCX, or image files can be attached to this placeholder upload flow.
+                </p>
+              </label>
+              <input className="hidden" id="file" name="file" onChange={handleChange} type="file" />
+              {errors.file ? <p className="mt-2 text-sm text-rose-600">{errors.file}</p> : null}
             </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-blue-600 text-white py-4 rounded-2xl font-semibold text-base hover:bg-blue-700 shadow-xl shadow-blue-200 transition-all active:scale-[0.98] disabled:opacity-50 mt-4"
-            >
-              {loading ? "Uploading..." : `Upload ${activeTab === "note" ? 'Notes' : 'Question'}`}
-            </button>
-          </form>
-
-          <AnimatePresence>
-            {message && (
-              <Motion.p 
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mt-6 text-center text-sm font-semibold text-gray-600"
+            {status.message ? (
+              <div
+                className={`rounded-[1.5rem] px-5 py-4 text-sm ${
+                  status.type === "success"
+                    ? "border border-emerald-200 bg-emerald-50 text-emerald-700"
+                    : "border border-rose-200 bg-rose-50 text-rose-700"
+                }`}
               >
-                {message}
-              </Motion.p>
-            )}
-          </AnimatePresence>
-        </Motion.div>
-      </main>
+                {status.message}
+              </div>
+            ) : null}
 
+            <div className="flex justify-end">
+              <button
+                className="rounded-full bg-campus-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-campus-700 disabled:cursor-not-allowed disabled:opacity-60"
+                disabled={submitting}
+                type="submit"
+              >
+                {submitting ? "Uploading..." : "Upload document"}
+              </button>
+            </div>
+          </form>
+        </section>
+      </main>
       <Footer />
     </div>
   );
-};
+}
 
-export default Upload;
+function Field({ label, name, value, onChange, error }) {
+  return (
+    <div>
+      <label className="mb-2 block text-sm font-medium text-slate-700" htmlFor={name}>
+        {label}
+      </label>
+      <input
+        className="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none transition focus:border-campus-600 focus:ring-4 focus:ring-campus-100"
+        id={name}
+        name={name}
+        onChange={onChange}
+        type="text"
+        value={value}
+      />
+      {error ? <p className="mt-2 text-sm text-rose-600">{error}</p> : null}
+    </div>
+  );
+}
