@@ -81,3 +81,29 @@ export function setStoredDocuments(documents) {
   localStorage.setItem(DOCUMENTS_STORAGE_KEY, JSON.stringify(documents));
   return documents;
 }
+
+const HISTORY_STORAGE_KEY = "unilibrary_history";
+
+export function getStoredHistory() {
+  try {
+    const raw = localStorage.getItem(HISTORY_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function addToStoredHistory(item) {
+  try {
+    const existing = getStoredHistory();
+    const deduped = existing.filter((h) => h.materialId !== item.materialId);
+    const updated = [
+      { ...item, viewedAt: item.viewedAt ?? new Date().toISOString() },
+      ...deduped,
+    ].slice(0, 50);
+    localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(updated));
+    return updated;
+  } catch {
+    return [];
+  }
+}

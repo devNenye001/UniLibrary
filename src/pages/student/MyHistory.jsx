@@ -1,3 +1,1 @@
-export default function MyHistory() {
-  return null;
-}
+export { default } from "./ViewHistory.jsx";

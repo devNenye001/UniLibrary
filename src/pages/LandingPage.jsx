@@ -95,23 +95,23 @@ export default function LandingPage() {
               initial={{ opacity: 0, scale: 0.96 }}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
-              <div className="rounded-[2rem] border border-white/70 bg-white/90 p-6 shadow-[0_30px_80px_rgba(15,23,42,0.08)] backdrop-blur">
+              <div className="rounded-4xl border border-white/70 bg-white/90 p-6 shadow-[0_30px_80px_rgba(15,23,42,0.08)] backdrop-blur">
                 <div className="grid gap-4 md:grid-cols-2">
-                  <div className="rounded-[1.5rem] bg-campus-900 p-6 text-white">
+                  <div className="rounded-3xl bg-campus-900 p-6 text-white">
                     <p className="text-sm text-sky-200">AI search</p>
                     <h3 className="mt-3 text-2xl font-semibold">Find the right document faster.</h3>
                     <p className="mt-3 text-sm leading-7 text-slate-300">
                       Search by title, course code, department, or topic with a streamlined interface for serious study.
                     </p>
                   </div>
-                  <div className="rounded-[1.5rem] bg-slate-100 p-6">
+                  <div className="rounded-3xl bg-slate-100 p-6">
                     <p className="text-sm text-slate-500">Role-aware access</p>
                     <h3 className="mt-3 text-2xl font-semibold text-slate-900">One portal, tailored permissions.</h3>
                     <p className="mt-3 text-sm leading-7 text-slate-600">
                       Students search and view, lecturers upload materials, and admins manage the system.
                     </p>
                   </div>
-                  <div className="rounded-[1.5rem] border border-slate-200 bg-white p-6 md:col-span-2">
+                  <div className="rounded-3xl border border-slate-200 bg-white p-6 md:col-span-2">
                     <div className="grid gap-4 md:grid-cols-3">
                       <StatCard label="Resources indexed" value="1,200+" />
                       <StatCard label="Departments supported" value="18" />
@@ -153,7 +153,7 @@ export default function LandingPage() {
         </section>
 
         <section className="px-6 py-16">
-          <div className="mx-auto max-w-7xl rounded-[2rem] bg-campus-900 px-8 py-12 text-white shadow-[0_30px_80px_rgba(15,23,42,0.16)] md:px-12">
+          <div className="mx-auto max-w-7xl rounded-4xl bg-campus-900 px-8 py-12 text-white shadow-[0_30px_80px_rgba(15,23,42,0.16)] md:px-12">
             <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-center">
               <div>
                 <p className="text-sm font-semibold uppercase tracking-[0.3em] text-sky-200">Ready for campus deployment</p>

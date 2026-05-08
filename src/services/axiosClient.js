@@ -1,35 +1,39 @@
 import axios from "axios";
-
-const AUTH_STORAGE_KEY = "unilibrary_auth";
+import { clearStoredAuth, getStoredAuth } from "../utils/auth.js";
 
 const axiosClient = axios.create({
-  baseURL: "https://unilibrary-server.onrender.com/api/v1",
+  baseURL:
+    import.meta.env.VITE_API_URL ?? "https://unilibrary-server.onrender.com/api/v1",
   headers: { "Content-Type": "application/json" },
   timeout: 15000,
 });
 
+// ── Request interceptor: attach Bearer token + strip Content-Type for FormData
 axiosClient.interceptors.request.use((config) => {
-  // Let axios set Content-Type + boundary automatically for FormData
   if (config.data instanceof FormData) {
     delete config.headers["Content-Type"];
   }
-
   try {
-    const raw = localStorage.getItem(AUTH_STORAGE_KEY);
-    if (raw) {
-      const { token } = JSON.parse(raw);
-      if (token) config.headers.Authorization = `Bearer ${token}`;
-    }
+    const { token } = getStoredAuth();
+    if (token) config.headers.Authorization = `Bearer ${token}`;
   } catch {
-    // ignore storage parse errors
+    // ignore storage errors
   }
-
   return config;
 });
 
+// ── Response interceptor: unwrap data, handle 401 globally
 axiosClient.interceptors.response.use(
   (response) => response.data,
   (error) => {
+    if (error.response?.status === 401) {
+      clearStoredAuth();
+      if (window.location.pathname !== "/login") {
+        window.location.replace("/login");
+      }
+      return Promise.reject(new Error("Session expired. Please log in again."));
+    }
+
     const message =
       error.response?.data?.message ??
       error.response?.data?.error ??

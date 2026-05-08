@@ -11,7 +11,7 @@ export default function NoteCard({ note }) {
       className="bg-white border border-blue-50 rounded-2xl shadow-sm hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-300 p-5 flex flex-col font-['DM_Sans']"
     >
       {/* Container for preview - maintained structure */}
-      <div className="w-full h-36 bg-gradient-to-br from-blue-50 to-white flex items-center justify-center rounded-xl mb-4 border border-blue-50/50">
+      <div className="w-full h-36 bg-gradient-to- from-blue-50 to-white flex items-center justify-center rounded-xl mb-4 border border-blue-50/50">
         <div className="flex flex-col items-center">
           <span className="text-5xl filter drop-shadow-sm">📄</span>
           <span className="text-[10px] font-semibold text-blue-400 mt-2 tracking-widest">

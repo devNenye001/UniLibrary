@@ -1,22 +1,35 @@
 import { Toaster } from "react-hot-toast";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import ChatbotWidget from "./components/ChatbotWidget";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { useAuth } from "./context/AuthContext";
+import NotFound from "./pages/NotFound";
 import AdminPanel from "./pages/AdminPanel";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminMaterials from "./pages/admin/AdminMaterials";
 import AdminUsers from "./pages/admin/AdminUsers";
+import AnalyticsDashboard from "./pages/admin/AnalyticsDashboard";
 import ChatbotPage from "./pages/ChatbotPage";
 import ForgotPassword from "./pages/ForgotPassword";
 import LandingPage from "./pages/LandingPage";
 import LecturerDashboard from "./pages/lecturer/LecturerDashboard";
+import MyUploads from "./pages/lecturer/MyUploads";
+import UploadMaterial from "./pages/lecturer/UploadMaterial";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import RecommendationsPage from "./pages/RecommendationsPage";
-import SearchResults from "./pages/SearchResults";
 import BrowseMaterials from "./pages/student/BrowseMaterials";
+import MaterialDetail from "./pages/student/MaterialDetail";
 import MyHistory from "./pages/student/MyHistory";
+import SearchPage from "./pages/student/SearchPage";
 import StudentDashboard from "./pages/student/StudentDashboard";
 import Upload from "./pages/Upload";
+
+function AuthenticatedWidgets() {
+  const { isAuthenticated } = useAuth();
+  if (!isAuthenticated) return null;
+  return <ChatbotWidget />;
+}
 
 export default function App() {
   return (
@@ -33,14 +46,13 @@ export default function App() {
         }}
       />
       <BrowserRouter>
+        <AuthenticatedWidgets />
         <Routes>
-          {/* Public */}
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
 
-          {/* Student routes */}
           <Route
             path="/dashboard"
             element={
@@ -61,7 +73,15 @@ export default function App() {
             path="/search"
             element={
               <ProtectedRoute>
-                <SearchResults />
+                <SearchPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/materials/:id"
+            element={
+              <ProtectedRoute>
+                <MaterialDetail />
               </ProtectedRoute>
             }
           />
@@ -90,7 +110,6 @@ export default function App() {
             }
           />
 
-          {/* Lecturer routes */}
           <Route
             path="/lecturer/dashboard"
             element={
@@ -107,13 +126,36 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/lecturer/upload"
+            element={
+              <ProtectedRoute allowedRoles={["lecturer", "admin"]}>
+                <UploadMaterial />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/lecturer/uploads"
+            element={
+              <ProtectedRoute allowedRoles={["lecturer", "admin"]}>
+                <MyUploads />
+              </ProtectedRoute>
+            }
+          />
 
-          {/* Admin routes */}
           <Route
             path="/admin/dashboard"
             element={
               <ProtectedRoute allowedRoles={["admin"]}>
                 <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/analytics"
+            element={
+              <ProtectedRoute allowedRoles={["admin"]}>
+                <AnalyticsDashboard />
               </ProtectedRoute>
             }
           />
@@ -142,7 +184,7 @@ export default function App() {
             }
           />
 
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </div>
