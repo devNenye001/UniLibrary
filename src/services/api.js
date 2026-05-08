@@ -1,6 +1,5 @@
 import { createDemoToken, getStoredDocuments, setStoredDocuments } from "../utils/auth.js";
-
-const API_BASE = "http://localhost:8000";
+import axiosClient from "./axiosClient.js";
 
 const seedDocuments = [
   {
@@ -14,7 +13,8 @@ const seedDocuments = [
     role: "lecturer",
     year: "2025",
     tags: ["machine learning", "ai", "lecture notes"],
-    description: "Week-by-week lecture notes covering supervised learning, model evaluation, and neural networks.",
+    description:
+      "Week-by-week lecture notes covering supervised learning, model evaluation, and neural networks.",
     createdAt: "2026-01-12",
   },
   {
@@ -28,7 +28,8 @@ const seedDocuments = [
     role: "admin",
     year: "2024",
     tags: ["past question", "gst", "revision"],
-    description: "Curated past questions for first-year students preparing for general studies examinations.",
+    description:
+      "Curated past questions for first-year students preparing for general studies examinations.",
     createdAt: "2026-02-02",
   },
   {
@@ -42,7 +43,8 @@ const seedDocuments = [
     role: "student",
     year: "2025",
     tags: ["linear algebra", "mathematics", "revision"],
-    description: "Student-friendly summary sheets with worked examples on matrices, eigenvalues, and vector spaces.",
+    description:
+      "Student-friendly summary sheets with worked examples on matrices, eigenvalues, and vector spaces.",
     createdAt: "2026-02-18",
   },
 ];
@@ -52,107 +54,107 @@ function wait(ms = 350) {
 }
 
 function getAllDocuments() {
-  const uploadedDocuments = getStoredDocuments();
-  return [...uploadedDocuments, ...seedDocuments];
+  return [...getStoredDocuments(), ...seedDocuments];
 }
 
-async function request(path, options = {}) {
-  const response = await fetch(`${API_BASE}${path}`, {
-    headers: {
-      "Content-Type": "application/json",
-      ...(options.headers ?? {}),
-    },
-    ...options,
-  });
-
-  const contentType = response.headers.get("content-type") ?? "";
-  const data = contentType.includes("application/json")
-    ? await response.json()
-    : await response.text();
-
-  if (!response.ok) {
-    throw new Error(data?.message || "Request failed");
-  }
-
-  return data;
-}
-
-async function requestForm(path, formData, options = {}) {
-  const response = await fetch(`${API_BASE}${path}`, {
-    method: "POST",
-    body: formData,
-    ...options,
-  });
-
-  const contentType = response.headers.get("content-type") ?? "";
-  const data = contentType.includes("application/json")
-    ? await response.json()
-    : await response.text();
-
-  if (!response.ok) {
-    throw new Error(data?.message || "Request failed");
-  }
-
-  return data;
-}
+// ─── Auth ────────────────────────────────────────────────────────────────────
 
 export async function loginUser(credentials) {
   try {
-    return await request("/auth/login", {
-      method: "POST",
-      body: JSON.stringify(credentials),
-    });
-  } catch {
-    await wait();
+    return await axiosClient.post("/auth/login", credentials);
+  } catch (error) {
+    // Re-throw real HTTP errors (401 wrong password, 403 not approved, etc.)
+    if (error.status) throw error;
 
-    const inferredRole = credentials.email?.toLowerCase().includes("admin")
+    // Network / server unreachable → demo fallback
+    await wait();
+    const email = credentials.email?.toLowerCase() ?? "";
+    const role = email.includes("admin")
       ? "admin"
-      : credentials.email?.toLowerCase().includes("lect")
+      : email.includes("lect")
         ? "lecturer"
         : "student";
-
     const user = {
       id: String(Date.now()),
       name: credentials.email?.split("@")[0] ?? "UniLibrary User",
       email: credentials.email,
-      role: inferredRole,
+      role,
     };
-
-    return {
-      token: createDemoToken(user),
-      user,
-      mode: "demo",
-    };
+    return { token: createDemoToken(user), user, mode: "demo" };
   }
 }
 
 export async function registerUser(payload) {
   try {
-    return await request("/auth/register", {
-      method: "POST",
-      body: JSON.stringify(payload),
-    });
-  } catch {
+    return await axiosClient.post("/auth/register", payload);
+  } catch (error) {
+    if (error.status) throw error;
+
     await wait();
-
-    const user = {
-      id: String(Date.now()),
-      name: payload.name,
-      email: payload.email,
-      role: payload.role,
-    };
-
     return {
-      token: createDemoToken(user),
-      user,
+      message: "Account created successfully. Awaiting admin approval.",
       mode: "demo",
     };
   }
 }
 
+export async function forgotPassword(email) {
+  try {
+    return await axiosClient.post("/auth/forgot-password", { email });
+  } catch (error) {
+    if (error.status) throw error;
+
+    await wait();
+    return {
+      message:
+        "If this email is registered, a password reset link has been sent to your inbox.",
+    };
+  }
+}
+
+// ─── Student-specific ────────────────────────────────────────────────────────
+
+export async function getStudentRecommendations() {
+  try {
+    const data = await axiosClient.get("/recommendations");
+    return data?.documents ?? data?.data ?? data ?? [];
+  } catch {
+    await wait(250);
+    return getAllDocuments()
+      .filter((d) => ["Past Question", "Lecture Note", "Study Guide"].includes(d.type))
+      .slice(0, 6);
+  }
+}
+
+export async function getPopularMaterials(department) {
+  try {
+    const params = department ? `?department=${encodeURIComponent(department)}` : "";
+    const data = await axiosClient.get(`/recommendations/popular${params}`);
+    return data?.documents ?? data?.data ?? data ?? [];
+  } catch {
+    await wait(250);
+    return getAllDocuments().slice(0, 4);
+  }
+}
+
+export async function getStudentStats() {
+  try {
+    return await axiosClient.get("/users/stats");
+  } catch {
+    await wait(200);
+    return {
+      totalMaterials: getAllDocuments().length,
+      myDownloads: 0,
+      myViewed: 0,
+    };
+  }
+}
+
+// ─── Documents ───────────────────────────────────────────────────────────────
+
 export async function getDocuments() {
   try {
-    const data = await request("/documents");
+    const data = await axiosClient.get("/documents");
     return data?.documents ?? data?.data ?? data ?? [];
   } catch {
     await wait(250);
@@ -164,16 +166,12 @@ export async function uploadDocument(payload) {
   try {
     const formData = new FormData();
     Object.entries(payload).forEach(([key, value]) => {
-      if (value !== undefined && value !== null) {
-        formData.append(key, value);
-      }
+      if (value !== undefined && value !== null) formData.append(key, value);
     });
-
-    return await requestForm("/documents/upload", formData);
+    return await axiosClient.post("/documents/upload", formData);
   } catch {
     await wait();
-
-    const uploadedDocument = {
+    const uploaded = {
       id: `doc-${Date.now()}`,
       title: payload.title,
       courseCode: payload.courseCode,
@@ -188,57 +186,42 @@ export async function uploadDocument(payload) {
       fileName: payload.file?.name ?? "document.pdf",
       createdAt: new Date().toISOString().slice(0, 10),
     };
-
-    setStoredDocuments([uploadedDocument, ...getStoredDocuments()]);
-    return uploadedDocument;
+    setStoredDocuments([uploaded, ...getStoredDocuments()]);
+    return uploaded;
   }
 }
 
 export async function searchDocuments(query) {
   try {
-    const data = await request(`/documents/search?q=${encodeURIComponent(query)}`);
+    const data = await axiosClient.get(
+      `/documents/search?q=${encodeURIComponent(query)}`,
+    );
     return data?.documents ?? data?.data ?? data ?? [];
   } catch {
     await wait(250);
-    const normalizedQuery = query.trim().toLowerCase();
-
-    return getAllDocuments().filter((document) => {
-      const haystack = [
-        document.title,
-        document.courseCode,
-        document.department,
-        document.type,
-        document.description,
-        ...(document.tags ?? []),
-      ]
+    const q = query.trim().toLowerCase();
+    return getAllDocuments().filter((doc) =>
+      [doc.title, doc.courseCode, doc.department, doc.type, doc.description, ...(doc.tags ?? [])]
         .join(" ")
-        .toLowerCase();
-
-      return haystack.includes(normalizedQuery);
-    });
+        .toLowerCase()
+        .includes(q),
+    );
   }
 }
 
 export async function getRecommendations(role = "student") {
   try {
-    const data = await request(`/documents/recommendations?role=${encodeURIComponent(role)}`);
+    const data = await axiosClient.get(
+      `/documents/recommendations?role=${encodeURIComponent(role)}`,
+    );
     return data?.documents ?? data?.data ?? data ?? [];
   } catch {
     await wait(250);
-    const documents = getAllDocuments();
-
-    if (role === "lecturer") {
-      return documents.filter((document) => document.type !== "Past Question").slice(0, 3);
-    }
-
-    if (role === "admin") {
-      return documents.slice(0, 3);
-    }
-
-    return documents
-      .filter((document) =>
-        ["Past Question", "Lecture Note", "Study Guide"].includes(document.type),
-      )
+    const docs = getAllDocuments();
+    if (role === "lecturer") return docs.filter((d) => d.type !== "Past Question").slice(0, 3);
+    if (role === "admin") return docs.slice(0, 3);
+    return docs
+      .filter((d) => ["Past Question", "Lecture Note", "Study Guide"].includes(d.type))
       .slice(0, 3);
   }
 }

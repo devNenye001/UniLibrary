@@ -1,4 +1,5 @@
 import { createContext, useContext, useMemo, useState } from "react";
+import { loginUser, registerUser } from "../services/api.js";
 import {
   clearStoredAuth,
   getStoredAuth,
@@ -12,19 +13,29 @@ const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const [auth, setAuth] = useState(() => getStoredAuth());
 
-  const setSession = (session) => {
-    const nextAuth = setStoredAuth(session);
-    setAuth(nextAuth);
-    return nextAuth;
-  };
-
-  const logout = () => {
-    clearStoredAuth();
-    setAuth({ token: "", user: null });
-  };
-
   const value = useMemo(() => {
     const role = getUserRole(auth);
+
+    const setSession = (session) => {
+      const nextAuth = setStoredAuth(session);
+      setAuth(nextAuth);
+      return nextAuth;
+    };
+
+    const login = async (credentials) => {
+      const session = await loginUser(credentials);
+      return setSession(session);
+    };
+
+    const register = async (payload) => {
+      const session = await registerUser(payload);
+      return setSession(session);
+    };
+
+    const logout = () => {
+      clearStoredAuth();
+      setAuth({ token: "", user: null });
+    };
 
     return {
       auth,
@@ -32,8 +43,10 @@ export function AuthProvider({ children }) {
       user: auth?.user ?? null,
       role,
       isAuthenticated: Boolean(auth?.token),
-      setSession,
+      login,
+      register,
       logout,
+      setSession,
       hasRole: (roles) => hasAllowedRole(role, roles),
     };
   }, [auth]);
@@ -41,6 +54,7 @@ export function AuthProvider({ children }) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   const context = useContext(AuthContext);
 

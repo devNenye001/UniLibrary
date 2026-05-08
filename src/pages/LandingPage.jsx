@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion as Motion } from "framer-motion";
 import {
   IoArrowForward,
   IoCloudUploadOutline,
@@ -64,7 +64,7 @@ export default function LandingPage() {
         <section className="relative overflow-hidden px-6 py-20">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(35,72,118,0.12),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(14,116,144,0.12),transparent_28%)]" />
           <div className="relative mx-auto grid max-w-7xl gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
-            <motion.div
+            <Motion.div
               animate={{ opacity: 1, y: 0 }}
               initial={{ opacity: 0, y: 24 }}
               transition={{ duration: 0.6 }}
@@ -88,9 +88,9 @@ export default function LandingPage() {
                   Access Existing Account
                 </Link>
               </div>
-            </motion.div>
+            </Motion.div>
 
-            <motion.div
+            <Motion.div
               animate={{ opacity: 1, scale: 1 }}
               initial={{ opacity: 0, scale: 0.96 }}
               transition={{ duration: 0.6, delay: 0.1 }}
@@ -120,7 +120,7 @@ export default function LandingPage() {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </Motion.div>
           </div>
         </section>
 
@@ -134,7 +134,7 @@ export default function LandingPage() {
             </div>
             <div className="mt-10 grid gap-6 md:grid-cols-3">
               {features.map((feature, index) => (
-                <motion.div
+                <Motion.div
                   key={feature.title}
                   animate={{ opacity: 1, y: 0 }}
                   initial={{ opacity: 0, y: 20 }}
@@ -146,7 +146,7 @@ export default function LandingPage() {
                   </div>
                   <h3 className="mt-5 text-xl font-semibold text-slate-900">{feature.title}</h3>
                   <p className="mt-3 text-sm leading-7 text-slate-600">{feature.description}</p>
-                </motion.div>
+                </Motion.div>
               ))}
             </div>
           </div>
