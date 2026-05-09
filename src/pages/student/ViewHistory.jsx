@@ -159,6 +159,7 @@ function EmptyState() {
 export default function ViewHistory() {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     document.title = "UniLibrary | View History";
@@ -166,8 +167,10 @@ export default function ViewHistory() {
 
   useEffect(() => {
     setLoading(true);
+    setError("");
     getViewHistory()
       .then(setHistory)
+      .catch((err) => setError(err.message || "Unable to load view history."))
       .finally(() => setLoading(false));
   }, []);
 
@@ -192,6 +195,10 @@ export default function ViewHistory() {
         {loading ? (
           <div className="space-y-3">
             {Array.from({ length: 4 }).map((_, i) => <ItemSkeleton key={i} />)}
+          </div>
+        ) : error ? (
+          <div className="rounded-[1.5rem] border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
+            {error}
           </div>
         ) : !hasAny ? (
           <EmptyState />

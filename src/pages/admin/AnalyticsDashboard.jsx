@@ -4,7 +4,6 @@ import {
   BarChart,
   CartesianGrid,
   Cell,
-  Legend,
   Line,
   LineChart,
   Pie,
@@ -15,26 +14,24 @@ import {
   YAxis,
 } from "recharts";
 import { Download, Search, TrendingUp, Users } from "lucide-react";
-import AdminLayout from "../../components/admin/AdminLayout.jsx";
 import StatCard from "../../components/StatCard.jsx";
 import { getAdminStats } from "../../services/api.js";
 
-// ── Brand colours (hex, used directly in SVG attributes) ────────────────────
 const C = {
-  primary: "#234876",   // campus-600
-  dark:    "#0d1c30",   // campus-900
-  mid:     "#173456",   // campus-700
-  light:   "#adc2dd",   // campus-300
-  pale:    "#e9eef6",   // campus-100
-  grid:    "#f1f5f9",   // slate-100
-  tick:    "#94a3b8",   // slate-400
+  primary: "#234876",
+  dark: "#0d1c30",
+  mid: "#173456",
+  light: "#adc2dd",
+  pale: "#e9eef6",
+  grid: "#f1f5f9",
+  tick: "#94a3b8",
 };
 
 const PIE_COLORS = [C.dark, C.primary, C.light];
 
-// ── Custom tooltip shared by all charts ─────────────────────────────────────
 function ChartTooltip({ active, payload, label }) {
   if (!active || !payload?.length) return null;
+
   return (
     <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-lg">
       {label ? <p className="mb-1 text-xs font-semibold text-slate-500">{label}</p> : null}
@@ -50,7 +47,6 @@ function ChartTooltip({ active, payload, label }) {
   );
 }
 
-// ── Skeleton loaders ─────────────────────────────────────────────────────────
 function CardSkeleton() {
   return (
     <div className="animate-pulse rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm">
@@ -70,7 +66,6 @@ function ChartSkeleton({ height = 260 }) {
   );
 }
 
-// ── Chart wrappers ───────────────────────────────────────────────────────────
 function ChartCard({ title, subtitle, children, className = "" }) {
   return (
     <div className={`rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm ${className}`}>
@@ -81,7 +76,6 @@ function ChartCard({ title, subtitle, children, className = "" }) {
   );
 }
 
-// ── Bar chart — materials per department ─────────────────────────────────────
 function DepartmentBarChart({ data }) {
   return (
     <ResponsiveContainer width="100%" height={260}>
@@ -110,18 +104,19 @@ function DepartmentBarChart({ data }) {
   );
 }
 
-// ── Pie chart — users by role ────────────────────────────────────────────────
 function RolePieChart({ data }) {
-  const total = data.reduce((s, d) => s + d.count, 0);
+  const total = data.reduce((sum, item) => sum + item.count, 0);
 
   const renderLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
     if (percent < 0.06) return null;
-    const RADIAN = Math.PI / 180;
-    const r = innerRadius + (outerRadius - innerRadius) * 0.55;
+
+    const radian = Math.PI / 180;
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.55;
+
     return (
       <text
-        x={cx + r * Math.cos(-midAngle * RADIAN)}
-        y={cy + r * Math.sin(-midAngle * RADIAN)}
+        x={cx + radius * Math.cos(-midAngle * radian)}
+        y={cy + radius * Math.sin(-midAngle * radian)}
         fill="#fff"
         textAnchor="middle"
         dominantBaseline="central"
@@ -155,7 +150,6 @@ function RolePieChart({ data }) {
         </PieChart>
       </ResponsiveContainer>
 
-      {/* Custom legend */}
       <div className="flex flex-col gap-3">
         {data.map((entry, i) => (
           <div key={entry.role} className="flex items-center gap-3">
@@ -166,20 +160,17 @@ function RolePieChart({ data }) {
             <div>
               <p className="text-sm font-medium text-slate-800">{entry.role}</p>
               <p className="text-xs text-slate-400">
-                {entry.count} · {Math.round((entry.count / total) * 100)}%
+                {entry.count} - {Math.round((entry.count / total) * 100)}%
               </p>
             </div>
           </div>
         ))}
-        <p className="mt-1 text-xs text-slate-400">
-          {total} total users
-        </p>
+        <p className="mt-1 text-xs text-slate-400">{total} total users</p>
       </div>
     </div>
   );
 }
 
-// ── Line chart — searches over time ─────────────────────────────────────────
 function SearchLineChart({ data }) {
   return (
     <ResponsiveContainer width="100%" height={220}>
@@ -212,10 +203,10 @@ function SearchLineChart({ data }) {
   );
 }
 
-// ── Main page ────────────────────────────────────────────────────────────────
 export default function AnalyticsDashboard() {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     document.title = "UniLibrary | Analytics";
@@ -223,165 +214,159 @@ export default function AnalyticsDashboard() {
 
   useEffect(() => {
     setLoading(true);
+    setError("");
     getAdminStats()
       .then(setStats)
+      .catch((err) => setError(err.message || "Unable to load analytics data."))
       .finally(() => setLoading(false));
   }, []);
 
   const statCards = stats
     ? [
-        {
-          title: "Most Downloaded",
-          value: stats.mostDownloaded?.downloads ?? "—",
-          subtitle: stats.mostDownloaded?.title,
-          icon: Download,
-          color: "campus",
-        },
-        {
-          title: "Most Searched",
-          value: stats.mostSearched ? `"${stats.mostSearched}"` : "—",
-          subtitle: "Top query this week",
-          icon: Search,
-          color: "violet",
-        },
-        {
-          title: "Searches Today",
-          value: stats.searchesToday ?? "—",
-          subtitle: "Unique search events",
-          icon: TrendingUp,
-          color: "emerald",
-        },
-        {
-          title: "Total Users",
-          value: stats.usersByRole?.reduce((s, d) => s + d.count, 0) ?? "—",
-          subtitle: "Across all roles",
-          icon: Users,
-          color: "amber",
-        },
-      ]
+      {
+        title: "Most Downloaded",
+        value: stats.mostDownloaded?.downloads ?? "-",
+        subtitle: stats.mostDownloaded?.title,
+        icon: Download,
+        color: "campus",
+      },
+      {
+        title: "Most Searched",
+        value: stats.mostSearched ? `"${stats.mostSearched}"` : "-",
+        subtitle: "Top query this week",
+        icon: Search,
+        color: "violet",
+      },
+      {
+        title: "Searches Today",
+        value: stats.searchesToday ?? "-",
+        subtitle: "Unique search events",
+        icon: TrendingUp,
+        color: "emerald",
+      },
+      {
+        title: "Total Users",
+        value: stats.usersByRole?.reduce((sum, item) => sum + item.count, 0) ?? "-",
+        subtitle: "Across all roles",
+        icon: Users,
+        color: "amber",
+      },
+    ]
     : null;
 
   return (
-    <AdminLayout>
-      <div className="px-6 py-8">
-        {/* Page header */}
-        <div className="mb-8">
-          <p className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-400">
-            Admin Portal
-          </p>
-          <h1 className="mt-3 text-3xl font-semibold text-slate-900">Analytics</h1>
-          <p className="mt-2 text-sm leading-7 text-slate-500">
-            Platform-wide usage metrics, material distribution, and user activity insights.
-          </p>
-        </div>
-
-        {/* Stat cards */}
-        <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {loading || !statCards
-            ? Array.from({ length: 4 }).map((_, i) => <CardSkeleton key={i} />)
-            : statCards.map((card) => (
-                <StatCard
-                  key={card.title}
-                  title={card.title}
-                  value={card.value}
-                  subtitle={card.subtitle}
-                  icon={card.icon}
-                  color={card.color}
-                />
-              ))}
-        </section>
-
-        {/* Charts — bar + pie */}
-        <section className="mt-6 grid gap-6 lg:grid-cols-2">
-          {loading ? (
-            <>
-              <ChartSkeleton height={380} />
-              <ChartSkeleton height={380} />
-            </>
-          ) : (
-            <>
-              <ChartCard
-                title="Materials per Department"
-                subtitle="Total documents by academic department"
-              >
-                <DepartmentBarChart data={stats?.materialsByDepartment ?? []} />
-              </ChartCard>
-
-              <ChartCard title="Users by Role" subtitle="Breakdown of registered user roles">
-                <RolePieChart data={stats?.usersByRole ?? []} />
-              </ChartCard>
-            </>
-          )}
-        </section>
-
-        {/* Line chart — searches over time */}
-        <section className="mt-6">
-          {loading ? (
-            <ChartSkeleton height={300} />
-          ) : (
-            <ChartCard
-              title="Searches Over Time"
-              subtitle="Daily search volume for the past 7 days"
-            >
-              <SearchLineChart data={stats?.searchesOverTime ?? []} />
-            </ChartCard>
-          )}
-        </section>
-
-        {/* Top 5 most downloaded */}
-        <section className="mt-6 mb-4">
-          {loading ? (
-            <ChartSkeleton height={340} />
-          ) : (
-            <div className="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm">
-              <p className="text-sm font-semibold text-slate-900">Top 5 Most Downloaded</p>
-              <p className="mt-0.5 text-xs text-slate-400">
-                Ranked by total download count
-              </p>
-
-              <ol className="mt-5 space-y-3">
-                {(stats?.topMaterials ?? []).map((item, i) => (
-                  <li
-                    key={item.id}
-                    className="flex items-center gap-4 rounded-2xl border border-slate-100 bg-slate-50 px-5 py-4 transition hover:border-slate-200"
-                  >
-                    {/* Rank badge */}
-                    <span
-                      className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold ${
-                        i === 0
-                          ? "bg-campus-900 text-white"
-                          : i === 1
-                            ? "bg-campus-600 text-white"
-                            : i === 2
-                              ? "bg-campus-300 text-campus-900"
-                              : "bg-slate-200 text-slate-600"
-                      }`}
-                    >
-                      {i + 1}
-                    </span>
-
-                    {/* Course code badge */}
-                    <span className="shrink-0 rounded-full bg-campus-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-campus-700">
-                      {item.courseCode || "—"}
-                    </span>
-
-                    {/* Title */}
-                    <p className="min-w-0 flex-1 truncate text-sm font-medium text-slate-900">
-                      {item.title}
-                    </p>
-
-                    {/* Download count */}
-                    <span className="shrink-0 text-sm font-semibold text-slate-900">
-                      {item.downloads}
-                    </span>
-                    <span className="shrink-0 text-xs text-slate-400">downloads</span>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          )}
-        </section>
+    <div className="px-6 py-8">
+      <div className="mb-8">
+        <p className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-400">
+          Admin Portal
+        </p>
+        <h1 className="mt-3 text-3xl font-semibold text-slate-900">Analytics</h1>
+        <p className="mt-2 text-sm leading-7 text-slate-500">
+          Platform-wide usage metrics, material distribution, and user activity insights.
+        </p>
       </div>
-    </AdminLayout>
+
+      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {loading || !statCards
+          ? Array.from({ length: 4 }).map((_, i) => <CardSkeleton key={i} />)
+          : statCards.map((card) => (
+            <StatCard
+              key={card.title}
+              title={card.title}
+              value={card.value}
+              subtitle={card.subtitle}
+              icon={card.icon}
+              color={card.color}
+            />
+          ))}
+      </section>
+
+      {error ? (
+        <div className="mt-6 rounded-3xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
+          {error}
+        </div>
+      ) : null}
+
+      <section className="mt-6 grid gap-6 lg:grid-cols-2">
+        {loading ? (
+          <>
+            <ChartSkeleton height={380} />
+            <ChartSkeleton height={380} />
+          </>
+        ) : (
+          <>
+            <ChartCard
+              title="Materials per Department"
+              subtitle="Total documents by academic department"
+            >
+              <DepartmentBarChart data={stats?.materialsByDepartment ?? []} />
+            </ChartCard>
+
+            <ChartCard title="Users by Role" subtitle="Breakdown of registered user roles">
+              <RolePieChart data={stats?.usersByRole ?? []} />
+            </ChartCard>
+          </>
+        )}
+      </section>
+
+      <section className="mt-6">
+        {loading ? (
+          <ChartSkeleton height={300} />
+        ) : (
+          <ChartCard
+            title="Searches Over Time"
+            subtitle="Daily search volume for the past 7 days"
+          >
+            <SearchLineChart data={stats?.searchesOverTime ?? []} />
+          </ChartCard>
+        )}
+      </section>
+
+      <section className="mt-6 mb-4">
+        {loading ? (
+          <ChartSkeleton height={340} />
+        ) : (
+          <div className="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm">
+            <p className="text-sm font-semibold text-slate-900">Top 5 Most Downloaded</p>
+            <p className="mt-0.5 text-xs text-slate-400">Ranked by total download count</p>
+
+            <ol className="mt-5 space-y-3">
+              {(stats?.topMaterials ?? []).map((item, i) => (
+                <li
+                  key={item.id}
+                  className="flex items-center gap-4 rounded-2xl border border-slate-100 bg-slate-50 px-5 py-4 transition hover:border-slate-200"
+                >
+                  <span
+                    className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold ${i === 0
+                        ? "bg-campus-900 text-white"
+                        : i === 1
+                          ? "bg-campus-600 text-white"
+                          : i === 2
+                            ? "bg-campus-300 text-campus-900"
+                            : "bg-slate-200 text-slate-600"
+                      }`}
+                  >
+                    {i + 1}
+                  </span>
+
+                  <span className="shrink-0 rounded-full bg-campus-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-campus-700">
+                    {item.courseCode || "-"}
+                  </span>
+
+                  <p className="min-w-0 flex-1 truncate text-sm font-medium text-slate-900">
+                    {item.title}
+                  </p>
+
+                  <span className="shrink-0 text-sm font-semibold text-slate-900">
+                    {item.downloads}
+                  </span>
+                  <span className="shrink-0 text-xs text-slate-400">downloads</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        )}
+      </section>
+    </div>
   );
 }

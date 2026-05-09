@@ -38,6 +38,9 @@ export default function StudentDashboard() {
   const [recommendations, setRecommendations] = useState([]);
   const [popular, setPopular] = useState([]);
   const [stats, setStats] = useState({ totalMaterials: 0, myDownloads: 0, myViewed: 0 });
+  const [statsError, setStatsError] = useState("");
+  const [recsError, setRecsError] = useState("");
+  const [popularError, setPopularError] = useState("");
   const [loadingRecs, setLoadingRecs] = useState(true);
   const [loadingPop, setLoadingPop] = useState(true);
   const [loadingStats, setLoadingStats] = useState(true);
@@ -48,22 +51,28 @@ export default function StudentDashboard() {
 
   useEffect(() => {
     setLoadingStats(true);
+    setStatsError("");
     getStudentStats()
       .then(setStats)
+      .catch((error) => setStatsError(error.message || "Unable to load dashboard stats."))
       .finally(() => setLoadingStats(false));
   }, []);
 
   useEffect(() => {
     setLoadingRecs(true);
+    setRecsError("");
     getStudentRecommendations()
       .then((data) => setRecommendations(data.slice(0, 6)))
+      .catch((error) => setRecsError(error.message || "Unable to load recommendations."))
       .finally(() => setLoadingRecs(false));
   }, []);
 
   useEffect(() => {
     setLoadingPop(true);
+    setPopularError("");
     getPopularMaterials(user?.department)
       .then((data) => setPopular(data.slice(0, 4)))
+      .catch((error) => setPopularError(error.message || "Unable to load popular materials."))
       .finally(() => setLoadingPop(false));
   }, [user?.department]);
 
@@ -137,6 +146,12 @@ export default function StudentDashboard() {
           </div>
         </section>
 
+        {statsError ? (
+          <div className="mt-6 rounded-[1.5rem] border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
+            {statsError}
+          </div>
+        ) : null}
+
         {/* ── Recommended For You ─────────────────────────────────── */}
         <section className="mt-10">
           <div className="flex items-center justify-between gap-4">
@@ -157,6 +172,12 @@ export default function StudentDashboard() {
               <IoArrowForward />
             </Link>
           </div>
+
+          {recsError ? (
+            <div className="mt-5 rounded-[1.5rem] border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
+              {recsError}
+            </div>
+          ) : null}
 
           <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {loadingRecs
@@ -211,6 +232,12 @@ export default function StudentDashboard() {
               <IoArrowForward />
             </Link>
           </div>
+
+          {popularError ? (
+            <div className="mt-5 rounded-[1.5rem] border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
+              {popularError}
+            </div>
+          ) : null}
 
           <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {loadingPop

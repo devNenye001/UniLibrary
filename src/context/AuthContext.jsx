@@ -1,5 +1,5 @@
-import { createContext, useContext, useMemo, useState } from "react";
-import { loginUser, registerUser } from "../services/api.js";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { getCurrentUser, loginUser, registerUser } from "../services/api.js";
 import {
   clearStoredAuth,
   getStoredAuth,
@@ -12,6 +12,40 @@ const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [auth, setAuth] = useState(() => getStoredAuth());
+  const [restoringSession, setRestoringSession] = useState(true);
+
+  useEffect(() => {
+    const token = auth?.token;
+
+    if (!token) {
+      setRestoringSession(false);
+      return;
+    }
+
+    let active = true;
+
+    getCurrentUser()
+      .then((session) => {
+        if (!active) return;
+        const nextAuth = setStoredAuth({
+          token: session.token || token,
+          user: session.user,
+        });
+        setAuth(nextAuth);
+      })
+      .catch(() => {
+        if (!active) return;
+        clearStoredAuth();
+        setAuth({ token: "", user: null });
+      })
+      .finally(() => {
+        if (active) setRestoringSession(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [auth?.token]);
 
   const value = useMemo(() => {
     const role = getUserRole(auth);
@@ -27,10 +61,7 @@ export function AuthProvider({ children }) {
       return setSession(session);
     };
 
-    const register = async (payload) => {
-      const session = await registerUser(payload);
-      return setSession(session);
-    };
+    const register = async (payload) => registerUser(payload);
 
     const logout = () => {
       clearStoredAuth();
@@ -43,13 +74,14 @@ export function AuthProvider({ children }) {
       user: auth?.user ?? null,
       role,
       isAuthenticated: Boolean(auth?.token),
+      restoringSession,
       login,
       register,
       logout,
       setSession,
       hasRole: (roles) => hasAllowedRole(role, roles),
     };
-  }, [auth]);
+  }, [auth, restoringSession]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

@@ -47,6 +47,8 @@ export default function LecturerDashboard() {
 
   const [stats, setStats] = useState({ totalUploads: 0, totalDownloads: 0, pendingApproval: 0 });
   const [materials, setMaterials] = useState([]);
+  const [statsError, setStatsError] = useState("");
+  const [materialsError, setMaterialsError] = useState("");
   const [loadingStats, setLoadingStats] = useState(true);
   const [loadingMaterials, setLoadingMaterials] = useState(true);
 
@@ -56,15 +58,19 @@ export default function LecturerDashboard() {
 
   useEffect(() => {
     setLoadingStats(true);
+    setStatsError("");
     getLecturerStats()
       .then(setStats)
+      .catch((error) => setStatsError(error.message || "Unable to load lecturer stats."))
       .finally(() => setLoadingStats(false));
   }, []);
 
   useEffect(() => {
     setLoadingMaterials(true);
+    setMaterialsError("");
     getLecturerMaterials()
       .then((data) => setMaterials(data.slice(0, 8)))
+      .catch((error) => setMaterialsError(error.message || "Unable to load recent uploads."))
       .finally(() => setLoadingMaterials(false));
   }, []);
 
@@ -170,6 +176,12 @@ export default function LecturerDashboard() {
               ))}
         </section>
 
+        {statsError ? (
+          <div className="mt-6 rounded-[1.5rem] border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
+            {statsError}
+          </div>
+        ) : null}
+
         {/* Recent uploads */}
         <section className="mt-8 mb-4">
           <div className="flex items-center justify-between gap-4">
@@ -188,6 +200,12 @@ export default function LecturerDashboard() {
               <IoArrowForward />
             </Link>
           </div>
+
+          {materialsError ? (
+            <div className="mt-5 rounded-[1.5rem] border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
+              {materialsError}
+            </div>
+          ) : null}
 
           <div className="mt-5 overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm">
             <div className="overflow-x-auto">

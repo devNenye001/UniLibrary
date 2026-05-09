@@ -10,7 +10,10 @@ import {
   IoSchoolOutline,
 } from "react-icons/io5";
 import MaterialCard from "../../components/MaterialCard.jsx";
+import AdminLayout from "../../components/admin/AdminLayout.jsx";
+import LecturerLayout from "../../components/lecturer/LecturerLayout.jsx";
 import StudentLayout from "../../components/student/StudentLayout.jsx";
+import { useAuth } from "../../context/AuthContext.jsx";
 import {
   getMaterialById,
   getSimilarMaterials,
@@ -46,9 +49,16 @@ function MetaCard({ icon, label, value }) {
   );
 }
 
+function RoleLayout({ role, children }) {
+  if (role === "admin") return <AdminLayout>{children}</AdminLayout>;
+  if (role === "lecturer") return <LecturerLayout>{children}</LecturerLayout>;
+  return <StudentLayout>{children}</StudentLayout>;
+}
+
 export default function MaterialDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { role } = useAuth();
   const [material, setMaterial] = useState(null);
   const [similarMaterials, setSimilarMaterials] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -108,7 +118,7 @@ export default function MaterialDetail() {
   };
 
   return (
-    <StudentLayout>
+    <RoleLayout role={role}>
       <div className="px-6 py-8">
         {loading ? <DetailSkeleton /> : null}
 
@@ -260,6 +270,6 @@ export default function MaterialDetail() {
           </>
         ) : null}
       </div>
-    </StudentLayout>
+    </RoleLayout>
   );
 }

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import {
   IoBarChartOutline,
+  IoCheckmarkCircleOutline,
   IoCloseOutline,
   IoDocumentTextOutline,
   IoGridOutline,
@@ -13,6 +14,7 @@ import { useAuth } from "../../context/AuthContext.jsx";
 
 const NAV_ITEMS = [
   { label: "Dashboard", to: "/admin/dashboard", icon: IoGridOutline },
+  { label: "Approvals", to: "/admin/approvals", icon: IoCheckmarkCircleOutline },
   { label: "Analytics", to: "/admin/analytics", icon: IoBarChartOutline },
   { label: "Materials", to: "/admin/materials", icon: IoDocumentTextOutline },
   { label: "Users", to: "/admin/users", icon: IoPeopleOutline },

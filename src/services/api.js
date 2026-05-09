@@ -6,6 +6,7 @@ export {
   login as loginUser,
   register as registerUser,
   forgotPassword,
+  getCurrentUser,
 } from "./auth.service.js";
 
 // ── Materials ─────────────────────────────────────────────────────────────────
@@ -43,8 +44,10 @@ export {
 export {
   getStats as getAdminStats,
   getUsers,
+  getPendingUsers,
   approveUser,
   rejectUser,
+  getPendingMaterials,
   approveMaterial,
   rejectMaterial,
 } from "./admin.service.js";

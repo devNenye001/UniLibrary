@@ -2,6 +2,7 @@ import { Toaster } from "react-hot-toast";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ChatbotWidget from "./components/ChatbotWidget";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminLayout from "./components/admin/AdminLayout";
 import { useAuth } from "./context/AuthContext";
 import NotFound from "./pages/NotFound";
 import AdminPanel from "./pages/AdminPanel";
@@ -9,6 +10,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminMaterials from "./pages/admin/AdminMaterials";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AnalyticsDashboard from "./pages/admin/AnalyticsDashboard";
+import PendingApprovals from "./pages/admin/PendingApprovals";
 import ChatbotPage from "./pages/ChatbotPage";
 import ForgotPassword from "./pages/ForgotPassword";
 import LandingPage from "./pages/LandingPage";
@@ -147,7 +149,9 @@ export default function App() {
             path="/admin/dashboard"
             element={
               <ProtectedRoute allowedRoles={["admin"]}>
-                <AdminDashboard />
+                <AdminLayout>
+                  <AdminDashboard />
+                </AdminLayout>
               </ProtectedRoute>
             }
           />
@@ -155,7 +159,9 @@ export default function App() {
             path="/admin/analytics"
             element={
               <ProtectedRoute allowedRoles={["admin"]}>
-                <AnalyticsDashboard />
+                <AdminLayout>
+                  <AnalyticsDashboard />
+                </AdminLayout>
               </ProtectedRoute>
             }
           />
@@ -163,7 +169,9 @@ export default function App() {
             path="/admin"
             element={
               <ProtectedRoute allowedRoles={["admin"]}>
-                <AdminPanel />
+                <AdminLayout>
+                  <AdminPanel />
+                </AdminLayout>
               </ProtectedRoute>
             }
           />
@@ -171,7 +179,19 @@ export default function App() {
             path="/admin/users"
             element={
               <ProtectedRoute allowedRoles={["admin"]}>
-                <AdminUsers />
+                <AdminLayout>
+                  <AdminUsers />
+                </AdminLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/approvals"
+            element={
+              <ProtectedRoute allowedRoles={["admin"]}>
+                <AdminLayout>
+                  <PendingApprovals />
+                </AdminLayout>
               </ProtectedRoute>
             }
           />
@@ -179,7 +199,9 @@ export default function App() {
             path="/admin/materials"
             element={
               <ProtectedRoute allowedRoles={["admin"]}>
-                <AdminMaterials />
+                <AdminLayout>
+                  <AdminMaterials />
+                </AdminLayout>
               </ProtectedRoute>
             }
           />

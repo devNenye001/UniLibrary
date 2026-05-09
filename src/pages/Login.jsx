@@ -4,7 +4,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import AuthLayout from "../components/auth/AuthLayout.jsx";
 import InputField from "../components/auth/InputField.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
-import { loginUser } from "../services/api.js";
 
 const ROLE_REDIRECTS = {
   student: "/dashboard",
@@ -13,9 +12,9 @@ const ROLE_REDIRECTS = {
 };
 
 const LEFT_FEATURES = [
-  "Use an email containing 'lect' to preview lecturer access in demo mode.",
-  "Use an email containing 'admin' to preview admin access in demo mode.",
-  "Any other email signs you in as a student when the demo fallback is active.",
+  "Students discover notes, past questions, and AI recommendations.",
+  "Lecturers upload academic documents and expand the knowledge base.",
+  "Admins review activity and manage platform oversight.",
 ];
 
 export default function Login() {
@@ -26,7 +25,7 @@ export default function Login() {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const { setSession } = useAuth();
+  const { login } = useAuth();
 
   useEffect(() => {
     document.title = "UniLibrary | Login";
@@ -63,8 +62,7 @@ export default function Login() {
     setServerError("");
 
     try {
-      const session = await loginUser(form);
-      setSession(session);
+      const session = await login(form);
 
       const role = session.user?.role ?? "student";
       const intendedPath = location.state?.from?.pathname;
@@ -73,7 +71,11 @@ export default function Login() {
       toast.success(`Welcome back, ${session.user?.name || "Scholar"}!`);
       navigate(destination, { replace: true });
     } catch (err) {
-      setServerError(err.message || "Unable to log in. Please try again.");
+      setServerError(
+        err.message === "Your account is pending admin approval"
+          ? "Your account is pending admin approval"
+          : err.message || "Unable to log in. Please try again.",
+      );
     } finally {
       setSubmitting(false);
     }

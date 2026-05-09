@@ -3,9 +3,9 @@ import { clearStoredAuth, getStoredAuth } from "../utils/auth.js";
 
 const axiosClient = axios.create({
   baseURL:
-    import.meta.env.VITE_API_URL ?? "https://unilibrary-server.onrender.com/api/v1",
+    import.meta.env.VITE_API_URL ?? "/api/v1",
   headers: { "Content-Type": "application/json" },
-  timeout: 15000,
+  timeout: 30000,
 });
 
 // ── Request interceptor: attach Bearer token + strip Content-Type for FormData
@@ -41,6 +41,7 @@ axiosClient.interceptors.response.use(
       "Request failed";
     const normalized = new Error(message);
     normalized.status = error.response?.status ?? null;
+    normalized.response = error.response?.data ?? null;
     return Promise.reject(normalized);
   },
 );
