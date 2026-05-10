@@ -4,7 +4,7 @@ import { clearStoredAuth, getStoredAuth } from "../utils/auth.js";
 const axiosClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL ?? "/api/v1",
   headers: { "Content-Type": "application/json" },
-  timeout: 90000,
+  timeout: 30000,
 });
 
 // ── Request interceptor: attach Bearer token + strip Content-Type for FormData
@@ -31,7 +31,7 @@ axiosClient.interceptors.response.use(
     // Retry once on timeout — Render free tier cold starts can exceed 60 s
     if (isTimeout && !error.config._retried) {
       error.config._retried = true;
-      error.config.timeout = 120000;
+      error.config.timeout = 30000;
       return axiosClient.request(error.config);
     }
 

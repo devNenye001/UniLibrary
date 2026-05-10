@@ -76,6 +76,7 @@ export default function Register() {
   }, []);
 
   const handleChange = (e) => {
+    
     const { name, value } = e.target;
     setForm((c) => {
       const next = { ...c, [name]: value };
