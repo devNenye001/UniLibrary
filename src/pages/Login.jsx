@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import AuthLayout from "../components/auth/AuthLayout.jsx";
 import InputField from "../components/auth/InputField.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
+import axiosClient from "../services/axiosClient.js";
 
 const ROLE_REDIRECTS = {
   student: "/dashboard",
@@ -22,6 +23,7 @@ export default function Login() {
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [slowRequest, setSlowRequest] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -29,6 +31,7 @@ export default function Login() {
 
   useEffect(() => {
     document.title = "UniLibrary | Login";
+    axiosClient.get("/health").catch(() => {});
   }, []);
 
   const validate = () => {
@@ -60,6 +63,9 @@ export default function Login() {
 
     setSubmitting(true);
     setServerError("");
+    setSlowRequest(false);
+
+    const slowTimer = setTimeout(() => setSlowRequest(true), 5000);
 
     try {
       const session = await login(form);
@@ -77,7 +83,9 @@ export default function Login() {
           : err.message || "Unable to log in. Please try again.",
       );
     } finally {
+      clearTimeout(slowTimer);
       setSubmitting(false);
+      setSlowRequest(false);
     }
   };
 
@@ -127,6 +135,12 @@ export default function Login() {
         {serverError ? (
           <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
             {serverError}
+          </div>
+        ) : null}
+
+        {slowRequest ? (
+          <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+            The server is starting up — this can take up to 30 seconds on first use. Please wait...
           </div>
         ) : null}
 

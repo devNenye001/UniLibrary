@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import AuthLayout from "../components/auth/AuthLayout.jsx";
 import InputField from "../components/auth/InputField.jsx";
 import { registerUser } from "../services/api.js";
+import axiosClient from "../services/axiosClient.js";
 
 const DEPARTMENTS = [
   "Accounting",
@@ -67,9 +68,11 @@ export default function Register() {
   const [serverError, setServerError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  const [slowRequest, setSlowRequest] = useState(false);
 
   useEffect(() => {
     document.title = "UniLibrary | Register";
+    axiosClient.get("/health").catch(() => {});
   }, []);
 
   const handleChange = (e) => {
@@ -112,6 +115,9 @@ export default function Register() {
 
     setSubmitting(true);
     setServerError("");
+    setSlowRequest(false);
+
+    const slowTimer = setTimeout(() => setSlowRequest(true), 5000);
 
     const payload = {
       name: form.name,
@@ -131,7 +137,9 @@ export default function Register() {
     } catch (err) {
       setServerError(err.message || "Unable to create your account. Please try again.");
     } finally {
+      clearTimeout(slowTimer);
       setSubmitting(false);
+      setSlowRequest(false);
     }
   };
 
@@ -254,6 +262,12 @@ export default function Register() {
           {serverError ? (
             <div className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
               {serverError}
+            </div>
+          ) : null}
+
+          {slowRequest ? (
+            <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+              The server is starting up — this can take up to 30 seconds on first use. Please wait...
             </div>
           ) : null}
 
