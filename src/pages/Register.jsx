@@ -72,11 +72,11 @@ export default function Register() {
 
   useEffect(() => {
     document.title = "UniLibrary | Register";
-    axiosClient.get("/health").catch(() => {});
+    axiosClient.get("/health").catch(() => { });
   }, []);
 
   const handleChange = (e) => {
-    
+
     const { name, value } = e.target;
     setForm((c) => {
       const next = { ...c, [name]: value };
@@ -198,6 +198,7 @@ export default function Register() {
             <InputField label="Role" name="role" as="select" value={form.role} onChange={handleChange}>
               <option value="student">Student</option>
               <option value="lecturer">Lecturer</option>
+              <option value="admin">Admin</option>
             </InputField>
           </div>
 
