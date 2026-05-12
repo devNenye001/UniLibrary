@@ -107,11 +107,13 @@ export function extractStats(response) {
 
 export function extractSession(response) {
   const payload = extractPayload(response) ?? {};
-  const user = payload?.user ?? payload?.data?.user ?? null;
+  // response.data (the nested 'data' key) is what extractPayload returns,
+  // but the token lives at the top-level response, so read both.
+  const user = response?.user ?? payload?.user ?? payload?.data?.user ?? null;
 
   return {
-    token: payload?.token ?? payload?.data?.token ?? "",
+    token: response?.token ?? payload?.token ?? payload?.data?.token ?? "",
     user: user ? normalizeUser(user) : null,
-    message: payload?.message ?? payload?.data?.message ?? "",
+    message: response?.message ?? payload?.message ?? payload?.data?.message ?? "",
   };
 }
