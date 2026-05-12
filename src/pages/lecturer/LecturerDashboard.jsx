@@ -97,7 +97,7 @@ export default function LecturerDashboard() {
     <LecturerLayout>
       <div className="px-6 py-8">
         {/* Hero */}
-        <section className="grid gap-6 rounded-[2rem] bg-[linear-gradient(135deg,#0d1c30_0%,#173456_60%,#234876_100%)] px-8 py-10 text-white shadow-[0_30px_80px_rgba(15,23,42,0.18)] md:grid-cols-[1fr_auto]">
+        <section className="grid gap-6 rounded-4xl bg-[linear-gradient(135deg,#0d1c30_0%,#173456_60%,#234876_100%)] px-8 py-10 text-white shadow-[0_30px_80px_rgba(15,23,42,0.18)] md:grid-cols-[1fr_auto]">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.3em] text-sky-200">
               Lecturer Dashboard
@@ -130,7 +130,7 @@ export default function LecturerDashboard() {
 
           {/* Quick stat highlights */}
           <div className="flex flex-row gap-4 md:flex-col md:justify-center">
-            <div className="rounded-[1.5rem] border border-white/10 bg-white/10 p-5 backdrop-blur">
+            <div className="rounded-3xl border border-white/10 bg-white/10 p-5 backdrop-blur">
               <div className="flex items-center gap-2">
                 <IoCheckmarkCircleOutline className="text-lg text-emerald-300" />
                 <p className="text-sm text-slate-200">Approved</p>
@@ -139,7 +139,7 @@ export default function LecturerDashboard() {
                 {loadingStats ? "—" : Math.max(0, stats.totalUploads - stats.pendingApproval)}
               </p>
             </div>
-            <div className="rounded-[1.5rem] border border-white/10 bg-white/10 p-5 backdrop-blur">
+            <div className="rounded-3xl border border-white/10 bg-white/10 p-5 backdrop-blur">
               <div className="flex items-center gap-2">
                 <IoHourglassOutline className="text-lg text-amber-300" />
                 <p className="text-sm text-slate-200">Pending</p>
@@ -177,7 +177,7 @@ export default function LecturerDashboard() {
         </section>
 
         {statsError ? (
-          <div className="mt-6 rounded-[1.5rem] border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
+          <div className="mt-6 rounded-3xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
             {statsError}
           </div>
         ) : null}
@@ -202,12 +202,12 @@ export default function LecturerDashboard() {
           </div>
 
           {materialsError ? (
-            <div className="mt-5 rounded-[1.5rem] border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
+            <div className="mt-5 rounded-3xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
               {materialsError}
             </div>
           ) : null}
 
-          <div className="mt-5 overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm">
+          <div className="mt-5 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>

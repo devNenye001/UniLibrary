@@ -23,23 +23,23 @@ import {
 function DetailSkeleton() {
   return (
     <div className="space-y-6 animate-pulse">
-      <div className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm">
+      <div className="rounded-4xl border border-slate-200 bg-white p-8 shadow-sm">
         <div className="h-4 w-28 rounded bg-slate-100" />
         <div className="mt-4 h-10 w-3/4 rounded-xl bg-slate-100" />
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           {Array.from({ length: 6 }).map((_, index) => (
-            <div key={index} className="h-20 rounded-[1.5rem] bg-slate-100" />
+            <div key={index} className="h-20 rounded-3xl bg-slate-100" />
           ))}
         </div>
       </div>
-      <div className="h-[32rem] rounded-[2rem] border border-slate-200 bg-white shadow-sm" />
+      <div className="h-128 rounded-4xl border border-slate-200 bg-white shadow-sm" />
     </div>
   );
 }
 
 function MetaCard({ icon, label, value }) {
   return (
-    <div className="rounded-[1.5rem] border border-slate-200 bg-slate-50 px-5 py-4">
+    <div className="rounded-3xl border border-slate-200 bg-slate-50 px-5 py-4">
       <div className="flex items-center gap-2 text-sm text-slate-500">
         <span className="text-campus-700">{icon}</span>
         {label}
@@ -123,7 +123,7 @@ export default function MaterialDetail() {
         {loading ? <DetailSkeleton /> : null}
 
         {!loading && error ? (
-          <div className="rounded-[2rem] border border-rose-200 bg-rose-50 px-6 py-10 text-center shadow-sm">
+          <div className="rounded-4xl border border-rose-200 bg-rose-50 px-6 py-10 text-center shadow-sm">
             <p className="text-lg font-semibold text-rose-800">Material unavailable</p>
             <p className="mt-2 text-sm text-rose-700">{error}</p>
           </div>
@@ -131,7 +131,7 @@ export default function MaterialDetail() {
 
         {!loading && material ? (
           <>
-            <section className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm">
+            <section className="rounded-4xl border border-slate-200 bg-white p-8 shadow-sm">
               <p className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-400">
                 Material Detail
               </p>
@@ -190,7 +190,7 @@ export default function MaterialDetail() {
               </div>
             </section>
 
-            <section className="mt-8 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm">
+            <section className="mt-8 rounded-4xl border border-slate-200 bg-white p-6 shadow-sm">
               <div className="flex items-center gap-3">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-campus-100 text-campus-700">
                   <IoDocumentTextOutline className="text-xl" />
@@ -205,10 +205,10 @@ export default function MaterialDetail() {
                 </div>
               </div>
 
-              <div className="mt-6 overflow-hidden rounded-[1.75rem] border border-slate-200 bg-slate-50">
+              <div className="mt-6 overflow-hidden rounded-3xl border border-slate-200 bg-slate-50">
                 {previewUrl ? (
                   previewUrl.includes("mega.nz") ? (
-                    <div className="flex min-h-[20rem] flex-col items-center justify-center gap-5 px-6 py-10 text-center">
+                    <div className="flex min-h-80 flex-col items-center justify-center gap-5 px-6 py-10 text-center">
                       <p className="text-lg font-semibold text-slate-900">
                         File stored on MEGA
                       </p>
@@ -226,13 +226,13 @@ export default function MaterialDetail() {
                     </div>
                   ) : (
                     <iframe
-                      className="h-[70vh] min-h-[32rem] w-full bg-white"
+                      className="h-[70vh] min-h-128 w-full bg-white"
                       src={previewUrl}
                       title={material.title || "Material preview"}
                     />
                   )
                 ) : (
-                  <div className="flex min-h-[20rem] items-center justify-center px-6 py-10 text-center">
+                  <div className="flex min-h-80 items-center justify-center px-6 py-10 text-center">
                     <div>
                       <p className="text-lg font-semibold text-slate-900">
                         Preview not available

@@ -155,11 +155,12 @@ export default function Register() {
     >
       <div className="mb-8">
         <h2 className="text-3xl font-semibold text-slate-900">Register</h2>
-        <p className="mt-2 text-sm text-slate-500">Set up your UniLibrary account.</p>
+        <p className="mt-2 text-sm text-slate
+        -500">Set up your UniLibrary account.</p>
       </div>
 
       {successMessage ? (
-        <div className="rounded-[1.5rem] border border-emerald-200 bg-emerald-50 px-6 py-6 text-sm">
+        <div className="rounded-3xl border border-emerald-200 bg-emerald-50 px-6 py-6 text-sm">
           <p className="font-semibold text-emerald-800">Registration submitted</p>
           <p className="mt-2 leading-7 text-emerald-700">{successMessage}</p>
           <p className="mt-4 text-emerald-700">
