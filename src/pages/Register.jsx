@@ -198,7 +198,6 @@ export default function Register() {
             <InputField label="Role" name="role" as="select" value={form.role} onChange={handleChange}>
               <option value="student">Student</option>
               <option value="lecturer">Lecturer</option>
-              <option value="admin">Admin</option>
             </InputField>
           </div>
 
