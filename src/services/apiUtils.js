@@ -57,13 +57,11 @@ export function normalizeMaterial(material) {
       material.year ??
       material.academic_year ??
       "",
-    uploadedBy:
-      material.uploadedBy ??
-      material.uploaded_by ??
-      material.author ??
-      material.uploaderName ??
-      material.lecturerName ??
-      "",
+    uploadedBy: (() => {
+      const raw = material.uploadedBy ?? material.uploaded_by;
+      if (raw && typeof raw === "object") return raw.name ?? raw.email ?? "";
+      return raw ?? material.author ?? material.uploaderName ?? material.lecturerName ?? "";
+    })(),
     downloads: Number(material.downloads ?? material.downloadCount ?? 0),
     downloadCount: Number(material.downloads ?? material.downloadCount ?? 0),
     views: Number(material.views ?? material.viewCount ?? 0),

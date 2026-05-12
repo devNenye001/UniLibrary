@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthLayout from "../components/auth/AuthLayout.jsx";
 import InputField from "../components/auth/InputField.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
@@ -26,7 +26,6 @@ export default function Login() {
   const [slowRequest, setSlowRequest] = useState(false);
 
   const navigate = useNavigate();
-  const location = useLocation();
   const { login } = useAuth();
 
   useEffect(() => {
@@ -71,8 +70,7 @@ export default function Login() {
       const session = await login(form);
 
       const role = session.user?.role ?? "student";
-      const intendedPath = location.state?.from?.pathname;
-      const destination = intendedPath ?? ROLE_REDIRECTS[role] ?? "/dashboard";
+      const destination = ROLE_REDIRECTS[role] ?? "/dashboard";
 
       toast.success(`Welcome back, ${session.user?.name || "Scholar"}!`);
       navigate(destination, { replace: true });
