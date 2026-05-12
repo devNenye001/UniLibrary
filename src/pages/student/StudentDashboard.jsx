@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   IoArrowForward,
   IoDownloadOutline,
@@ -34,6 +34,7 @@ function CardSkeleton() {
 
 export default function StudentDashboard() {
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const [recommendations, setRecommendations] = useState([]);
   const [popular, setPopular] = useState([]);
@@ -98,7 +99,7 @@ export default function StudentDashboard() {
     <StudentLayout>
       <div className="px-6 py-8">
         {/* ── Hero / Welcome ──────────────────────────────────────── */}
-        <section className="grid gap-6 rounded-[2rem] bg-[linear-gradient(135deg,#0d1c30_0%,#173456_60%,#234876_100%)] px-8 py-10 text-white shadow-[0_30px_80px_rgba(15,23,42,0.18)] md:grid-cols-[1.2fr_0.8fr]">
+        <section className="grid gap-6 rounded-4xl bg-[linear-gradient(135deg,#0d1c30_0%,#173456_60%,#234876_100%)] px-8 py-10 text-white shadow-[0_30px_80px_rgba(15,23,42,0.18)] md:grid-cols-[1.2fr_0.8fr]">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.3em] text-sky-200">
               Student Dashboard
@@ -134,7 +135,7 @@ export default function StudentDashboard() {
             {statCards.map((card) => (
               <div
                 key={card.label}
-                className="rounded-[1.5rem] border border-white/10 bg-white/10 p-5 backdrop-blur"
+                className="rounded-3xl border border-white/10 bg-white/10 p-5 backdrop-blur"
               >
                 <div className="flex items-center justify-between">
                   <p className="text-sm text-slate-200">{card.label}</p>
@@ -147,7 +148,7 @@ export default function StudentDashboard() {
         </section>
 
         {statsError ? (
-          <div className="mt-6 rounded-[1.5rem] border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
+          <div className="mt-6 rounded-3xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
             {statsError}
           </div>
         ) : null}
@@ -174,7 +175,7 @@ export default function StudentDashboard() {
           </div>
 
           {recsError ? (
-            <div className="mt-5 rounded-[1.5rem] border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
+            <div className="mt-5 rounded-3xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
               {recsError}
             </div>
           ) : null}
@@ -186,6 +187,7 @@ export default function StudentDashboard() {
                 ? recommendations.map((item) => (
                     <MaterialCard
                       key={item.id}
+                      id={item.id}
                       title={item.title}
                       courseCode={item.courseCode}
                       department={item.department}
@@ -193,6 +195,7 @@ export default function StudentDashboard() {
                       academicSession={item.year ?? item.academicSession}
                       downloadCount={item.downloadCount}
                       fileUrl={item.fileUrl}
+                      onView={({ id }) => navigate(`/materials/${id}`)}
                     />
                   ))
                 : (
@@ -234,7 +237,7 @@ export default function StudentDashboard() {
           </div>
 
           {popularError ? (
-            <div className="mt-5 rounded-[1.5rem] border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
+            <div className="mt-5 rounded-3xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
               {popularError}
             </div>
           ) : null}
@@ -246,6 +249,7 @@ export default function StudentDashboard() {
                 ? popular.map((item) => (
                     <MaterialCard
                       key={item.id}
+                      id={item.id}
                       title={item.title}
                       courseCode={item.courseCode}
                       department={item.department}
@@ -253,6 +257,7 @@ export default function StudentDashboard() {
                       academicSession={item.year ?? item.academicSession}
                       downloadCount={item.downloadCount}
                       fileUrl={item.fileUrl}
+                      onView={({ id }) => navigate(`/materials/${id}`)}
                     />
                   ))
                 : (
