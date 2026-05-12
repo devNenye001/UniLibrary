@@ -207,11 +207,30 @@ export default function MaterialDetail() {
 
               <div className="mt-6 overflow-hidden rounded-[1.75rem] border border-slate-200 bg-slate-50">
                 {previewUrl ? (
-                  <iframe
-                    className="h-[70vh] min-h-[32rem] w-full bg-white"
-                    src={previewUrl}
-                    title={material.title || "Material preview"}
-                  />
+                  previewUrl.includes("mega.nz") ? (
+                    <div className="flex min-h-[20rem] flex-col items-center justify-center gap-5 px-6 py-10 text-center">
+                      <p className="text-lg font-semibold text-slate-900">
+                        File stored on MEGA
+                      </p>
+                      <p className="text-sm text-slate-500">
+                        This file cannot be previewed inline. Open it in a new tab to view or download.
+                      </p>
+                      <a
+                        href={previewUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 rounded-full bg-campus-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-campus-700"
+                      >
+                        Open in MEGA
+                      </a>
+                    </div>
+                  ) : (
+                    <iframe
+                      className="h-[70vh] min-h-[32rem] w-full bg-white"
+                      src={previewUrl}
+                      title={material.title || "Material preview"}
+                    />
+                  )
                 ) : (
                   <div className="flex min-h-[20rem] items-center justify-center px-6 py-10 text-center">
                     <div>
