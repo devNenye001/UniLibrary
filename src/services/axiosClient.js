@@ -1,8 +1,20 @@
 import axios from "axios";
 import { clearStoredAuth, getStoredAuth } from "../utils/auth.js";
 
+const RENDER_API_URL = "https://unilibrary-server.onrender.com/api/v1";
+
+function resolveApiBaseUrl() {
+  const configured = import.meta.env.VITE_API_URL;
+
+  if (!configured || configured.includes("railway.app")) {
+    return RENDER_API_URL;
+  }
+
+  return configured;
+}
+
 const axiosClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL ?? "/api/v1",
+  baseURL: resolveApiBaseUrl(),
   headers: { "Content-Type": "application/json" },
   timeout: 30000,
 });
