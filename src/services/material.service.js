@@ -84,6 +84,12 @@ export async function viewMaterial(id) {
 
 export const logMaterialView = viewMaterial;
 
+export async function downloadMaterial(id) {
+  const response = await axiosClient.post(`/materials/${id}/download`, {});
+  const payload = extractPayload(response) ?? {};
+  return normalizeMaterial(payload?.material ?? payload);
+}
+
 export async function getLecturerStats() {
   return extractPayload(await axiosClient.get("/users/lecturer-stats")) ?? {};
 }

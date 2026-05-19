@@ -16,6 +16,11 @@ export async function forgotPassword(email) {
   return extractPayload(response) ?? {};
 }
 
+export async function resetPassword(token, password) {
+  const response = await axiosClient.patch(`/auth/reset-password/${token}`, { password });
+  return extractSession(response);
+}
+
 export async function getCurrentUser() {
   const response = await axiosClient.get("/auth/me");
   return extractSession(response);

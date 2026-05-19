@@ -15,6 +15,7 @@ import LecturerLayout from "../../components/lecturer/LecturerLayout.jsx";
 import StudentLayout from "../../components/student/StudentLayout.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
 import {
+  downloadMaterial,
   getMaterialById,
   getSimilarMaterials,
   logMaterialView,
@@ -109,12 +110,27 @@ export default function MaterialDetail() {
 
   const handleDownload = () => {
     if (!previewUrl) return;
+
     const anchor = document.createElement("a");
     anchor.href = previewUrl;
     anchor.download = material?.fileName || `${material?.title || "material"}.pdf`;
     anchor.target = "_blank";
     anchor.rel = "noopener noreferrer";
     anchor.click();
+
+    downloadMaterial(id)
+      .then((updated) => {
+        if (updated?.id) {
+          setMaterial((current) => ({ ...current, ...updated }));
+        }
+      })
+      .catch(() => {
+        setMaterial((current) => ({
+          ...current,
+          downloadCount: Number(current?.downloadCount ?? 0) + 1,
+          downloads: Number(current?.downloads ?? current?.downloadCount ?? 0) + 1,
+        }));
+      });
   };
 
   return (

@@ -6,6 +6,7 @@ export {
   login as loginUser,
   register as registerUser,
   forgotPassword,
+  resetPassword,
   getCurrentUser,
 } from "./auth.service.js";
 
@@ -19,6 +20,7 @@ export {
   uploadDocument,
   updateMaterial,
   deleteMaterial,
+  downloadMaterial,
   viewMaterial as logMaterialView,
   getLecturerStats,
   getLecturerMaterials,
