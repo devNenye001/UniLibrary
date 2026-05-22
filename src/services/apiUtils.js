@@ -100,7 +100,16 @@ export function extractMaterials(response) {
 }
 
 export function extractStats(response) {
-  return extractPayload(response) ?? {};
+  const body = response?.data ?? response ?? {};
+  if (!body || typeof body !== "object") return {};
+
+  const nested =
+    body.data && typeof body.data === "object" && !Array.isArray(body.data)
+      ? body.data
+      : {};
+
+  const { data: _nested, status: _status, ...topLevel } = body;
+  return { ...nested, ...topLevel };
 }
 
 export function extractSession(response) {

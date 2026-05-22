@@ -34,11 +34,16 @@ export default function ForgotPassword() {
       const res = await forgotPassword(email);
       const msg =
         res?.message ??
-        "If this email is registered, a password reset link has been sent to your inbox.";
+        "If that email address is registered, a password reset link has been sent to your inbox.";
       setSent(true);
       toast.success(msg);
     } catch (err) {
-      setError(err.message || "Unable to process your request. Please try again.");
+      const message =
+        err.message ||
+        err.response?.message ||
+        "Unable to send the reset email. Please try again later.";
+      setError(message);
+      toast.error(message);
     } finally {
       setSubmitting(false);
     }

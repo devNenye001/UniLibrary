@@ -32,7 +32,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     let active = true;
 
-    getAdminStats(token)
+    getAdminStats()
       .then((data) => {
         if (active) setStats(data);
       })

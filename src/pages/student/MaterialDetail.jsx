@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   IoCalendarOutline,
@@ -120,16 +121,19 @@ export default function MaterialDetail() {
 
     downloadMaterial(id)
       .then((updated) => {
-        if (updated?.id) {
-          setMaterial((current) => ({ ...current, ...updated }));
-        }
-      })
-      .catch(() => {
         setMaterial((current) => ({
           ...current,
-          downloadCount: Number(current?.downloadCount ?? 0) + 1,
-          downloads: Number(current?.downloads ?? current?.downloadCount ?? 0) + 1,
+          ...(updated || {}),
+          downloadCount: Number(
+            updated?.downloadCount ?? current?.downloadCount ?? 0,
+          ),
+          downloads: Number(
+            updated?.downloads ?? updated?.downloadCount ?? current?.downloads ?? 0,
+          ),
         }));
+      })
+      .catch(() => {
+        toast.error("Download started, but the download count could not be updated.");
       });
   };
 
