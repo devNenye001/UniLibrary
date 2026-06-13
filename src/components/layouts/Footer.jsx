@@ -1,3 +1,4 @@
+import { FaBook } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 const quickLinks = [
@@ -14,11 +15,10 @@ export default function Footer() {
         <div>
           <div className="flex items-center gap-3">
             <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-campus-900 text-sm font-bold text-white">
-              UL
+             <FaBook />
             </div>
             <div>
               <p className="text-lg font-semibold text-slate-900">UniLibrary</p>
-              <p className="text-sm text-slate-500">AI-powered university knowledge hub</p>
             </div>
           </div>
           <p className="mt-5 max-w-md text-sm leading-7 text-slate-500">

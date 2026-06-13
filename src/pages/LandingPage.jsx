@@ -9,6 +9,7 @@ import {
   IoSparklesOutline,
 } from "react-icons/io5";
 import Footer from "../components/layouts/Footer.jsx";
+import { FaBook } from "react-icons/fa";
 
 const features = [
   {
@@ -42,11 +43,10 @@ export default function LandingPage() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
             <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-campus-900 text-sm font-bold text-white">
-              UL
+              <FaBook />
             </div>
             <div>
               <p className="text-lg font-semibold text-slate-900">UniLibrary</p>
-              <p className="text-xs text-slate-500">University AI-powered digital library</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
