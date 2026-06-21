@@ -138,6 +138,16 @@ export default function ChatbotPage() {
         ...prev,
         { role: "assistant", content: reply, materials, timestamp: Date.now() },
       ]);
+    } catch (err) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: err.message || "Sorry, I encountered an error while processing your request. Please try again.",
+          materials: [],
+          timestamp: Date.now(),
+        },
+      ]);
     } finally {
       setTyping(false);
     }

@@ -4,11 +4,10 @@ import { IoLogOutOutline, IoSearchOutline } from "react-icons/io5";
 import { useAuth } from "../../context/AuthContext.jsx";
 
 function navClass({ isActive }) {
-  return `rounded-full px-4 py-2 text-sm font-medium transition-all ${
-    isActive
+  return `rounded-full px-4 py-2 text-sm font-medium transition-all ${isActive
       ? "bg-slate-900 text-white shadow-md"
       : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
-  }`;
+    }`;
 }
 
 export default function Navbar() {
@@ -96,7 +95,7 @@ export default function Navbar() {
           ) : (
             <div className="flex items-center gap-3 self-end">
               <Link className="rounded-full px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors" to="/login">
-                Sign In
+                Log In
               </Link>
               <Link className="rounded-full bg-slate-900 px-5 py-2.5 text-sm font-medium text-white shadow-[0_4px_14px_0_rgba(0,0,0,0.1)] transition-all hover:shadow-[0_6px_20px_rgba(0,0,0,0.15)] hover:-translate-y-[1px]" to="/register">
                 Get Started

@@ -16,9 +16,6 @@ export default function Footer() {
             <img src="/logo1.jpg" alt="GoLibrary Logo" className="h-10 w-10 rounded-xl object-cover shadow-sm" />
             <span className="text-xl font-bold tracking-tight text-slate-900">GoLibrary</span>
           </div>
-          <p className="mt-6 max-w-md text-sm leading-relaxed text-slate-500">
-            GoLibrary helps students, lecturers, and administrators manage academic resources, past questions, and knowledge discovery in one elegant portal.
-          </p>
         </div>
 
         <div>
@@ -37,13 +34,13 @@ export default function Footer() {
           <p className="text-xs font-semibold uppercase tracking-widest text-campus-300 relative z-10">Academic Excellence</p>
           <h3 className="mt-4 text-2xl font-bold tracking-tight relative z-10">Empowering discovery.</h3>
           <p className="mt-3 text-sm leading-relaxed text-slate-300 relative z-10">
-            A premium digital library infrastructure designed specifically for Godfrey Okoye University.
+           GoLibrary helps students, lecturers, and administrators manage academic resources and past questions.
           </p>
         </div>
       </div>
 
       <div className="border-t border-slate-200/60 relative z-10">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-6 text-sm text-slate-500 md:flex-row md:items-center md:justify-between">
+        <div className="mx-auto flex max-w-7xl justify-center px-6 py-6 text-sm text-slate-500 text-center">
           <p>&copy; {new Date().getFullYear()} GoLibrary. All rights reserved.</p>
         </div>
       </div>

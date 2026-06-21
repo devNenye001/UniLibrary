@@ -15,7 +15,7 @@ import Footer from "../components/layouts/Footer";
 
 export default function LandingPage() {
   useEffect(() => {
-    document.title = "GoLibrary | Premium University Portal";
+    document.title = "GoLibrary | University Digital Library";
   }, []);
 
   const containerVariants = {
@@ -38,12 +38,12 @@ export default function LandingPage() {
       <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/20 bg-white/60 backdrop-blur-2xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
-            <img src="/logo1.jpg" alt="GoLibrary Logo" className="h-10 w-10 rounded-xl object-cover shadow-sm" />
+            <img src="/logo1.jpg" alt="GoLibrary Logo" className="h-10 w-10 rounded-2x3 object-cover" />
             <span className="text-xl font-bold tracking-tight text-slate-900">GoLibrary</span>
           </div>
           <div className="flex items-center gap-4">
             <Link className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors" to="/login">
-              Sign In
+              Log In
             </Link>
             <Link className="rounded-full bg-slate-900 px-5 py-2.5 text-sm font-medium text-white shadow-[0_4px_14px_0_rgba(0,0,0,0.1)] transition-all hover:shadow-[0_6px_20px_rgba(0,0,0,0.15)] hover:-translate-y-[1px]" to="/register">
               Get Started
@@ -56,22 +56,22 @@ export default function LandingPage() {
         {/* Hero Section */}
         <section className="relative flex flex-col items-center justify-center px-6 pt-16 pb-24 text-center">
           <div className="absolute inset-0 aurora-bg -z-10 opacity-70"></div>
-          
+
           <motion.div
             variants={containerVariants}
             initial="hidden"
             animate="visible"
             className="max-w-4xl mx-auto flex flex-col items-center"
           >
-            <motion.h1 variants={itemVariants} className="text-5xl md:text-7xl font-semibold tracking-tight text-slate-900 leading-[1.1] mb-8 font-sans">
+            <motion.h1 variants={itemVariants} className="text-3xl md:text-7xl font-semibold tracking-tight text-slate-900 leading-[1.1] mb-8 font-sans">
               Every academic resource. <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-campus-600 to-campus-300">Beautifully organized.</span>
             </motion.h1>
-            
+
             <motion.p variants={itemVariants} className="text-lg md:text-xl leading-relaxed text-slate-600 max-w-2xl mx-auto mb-10">
-              Experience the world's most elegant academic platform. AI-powered search, seamless uploads, and smart recommendations tailored for Godfrey Okoye University.
+              AI-powered search, seamless uploads, and smart recommendations tailored for Godfrey Okoye University.
             </motion.p>
-            
+
             <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto mb-16">
               <Link className="group flex h-14 items-center justify-center gap-2 rounded-full bg-slate-900 px-8 text-base font-semibold text-white shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-all hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)] hover:-translate-y-1 w-full sm:w-auto" to="/register">
                 Start Exploring
@@ -208,7 +208,7 @@ export default function LandingPage() {
         {/* Feature Section: Students */}
         <section className="py-24 px-6 relative overflow-hidden">
           <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-100px" }}
@@ -219,7 +219,7 @@ export default function LandingPage() {
               <p className="text-lg text-slate-600 mb-8 leading-relaxed">
                 Finding the right study material shouldn't be a chore. With GoLibrary's AI-powered search, pinpoint exactly what you need in milliseconds.
               </p>
-              
+
               <div className="space-y-6">
                 {[
                   { icon: <IoSearchOutline />, title: "AI-Powered Search", desc: "Instantly find notes, past questions, and slides." },
@@ -239,7 +239,7 @@ export default function LandingPage() {
               </div>
             </motion.div>
 
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
@@ -247,44 +247,44 @@ export default function LandingPage() {
               className="relative"
             >
               <div className="aspect-[4/3] rounded-[2rem] glass-card p-6 bg-gradient-to-tr from-slate-100 to-white overflow-hidden shadow-2xl relative border border-white/60">
-                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(10,132,255,0.1),transparent_50%)]"></div>
-                 
-                 {/* Student View Mockup */}
-                 <div className="flex flex-col gap-4 h-full">
-                    {/* Header search bar */}
-                    <div className="w-full h-11 rounded-full bg-white/80 border border-slate-200/60 shadow-sm flex items-center px-4">
-                       <IoSearchOutline className="text-slate-400 mr-2 text-sm shrink-0" />
-                       <span className="text-xs font-semibold text-slate-800">COM 301 - Computer Architecture</span>
-                    </div>
-                    
-                    {/* Simulated Note Card */}
-                    <div className="flex-1 glass-card bg-white/90 p-5 flex flex-col border border-white shadow-md">
-                      {/* Document Preview Area */}
-                      <div className="w-full h-24 bg-slate-50 flex items-center justify-center rounded-xl mb-4 border border-slate-200/50 shadow-inner">
-                        <div className="flex flex-col items-center">
-                          <span className="text-3xl">📄</span>
-                          <span className="text-[9px] font-bold text-campus-600 mt-2 tracking-[0.25em]">PDF DOCUMENT</span>
-                        </div>
-                      </div>
-                      
-                      <h4 className="font-bold text-sm text-slate-800 truncate mb-1">
-                        Lecture notes on MIPS Assembly Language
-                      </h4>
-                      <p className="text-[9px] font-bold text-campus-600 mb-1 uppercase tracking-widest">
-                        COM 301
-                      </p>
-                      <p className="text-xs font-medium text-slate-400 mb-4">2023/2024 Session • 2.4 MB</p>
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(10,132,255,0.1),transparent_50%)]"></div>
 
-                      <div className="mt-auto flex justify-end gap-2">
-                        <button className="rounded-full bg-slate-100 px-4 py-2 text-[10px] font-bold text-slate-600 transition hover:bg-slate-200">
-                          View details
-                        </button>
-                        <button className="rounded-full bg-slate-900 px-4 py-2 text-[10px] font-bold text-white transition hover:bg-slate-800">
-                          Preview Note
-                        </button>
+                {/* Student View Mockup */}
+                <div className="flex flex-col gap-4 h-full">
+                  {/* Header search bar */}
+                  <div className="w-full h-11 rounded-full bg-white/80 border border-slate-200/60 shadow-sm flex items-center px-4">
+                    <IoSearchOutline className="text-slate-400 mr-2 text-sm shrink-0" />
+                    <span className="text-xs font-semibold text-slate-800">COM 301 - Computer Architecture</span>
+                  </div>
+
+                  {/* Simulated Note Card */}
+                  <div className="flex-1 glass-card bg-white/90 p-5 flex flex-col border border-white shadow-md">
+                    {/* Document Preview Area */}
+                    <div className="w-full h-24 bg-slate-50 flex items-center justify-center rounded-xl mb-4 border border-slate-200/50 shadow-inner">
+                      <div className="flex flex-col items-center">
+                        <span className="text-3xl">📄</span>
+                        <span className="text-[9px] font-bold text-campus-600 mt-2 tracking-[0.25em]">PDF DOCUMENT</span>
                       </div>
                     </div>
-                 </div>
+
+                    <h4 className="font-bold text-sm text-slate-800 truncate mb-1">
+                      Lecture notes on MIPS Assembly Language
+                    </h4>
+                    <p className="text-[9px] font-bold text-campus-600 mb-1 uppercase tracking-widest">
+                      COM 301
+                    </p>
+                    <p className="text-xs font-medium text-slate-400 mb-4">2023/2024 Session • 2.4 MB</p>
+
+                    <div className="mt-auto flex justify-end gap-2">
+                      <button className="rounded-full bg-slate-100 px-4 py-2 text-[10px] font-bold text-slate-600 transition hover:bg-slate-200">
+                        View details
+                      </button>
+                      <button className="rounded-full bg-slate-900 px-4 py-2 text-[10px] font-bold text-white transition hover:bg-slate-800">
+                        Preview Note
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </motion.div>
           </div>
@@ -294,7 +294,7 @@ export default function LandingPage() {
         <section className="py-24 px-6 bg-slate-900 text-white relative overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(94,92,230,0.15),transparent_50%)]"></div>
           <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
@@ -302,47 +302,47 @@ export default function LandingPage() {
               className="order-2 lg:order-1 relative"
             >
               <div className="aspect-[4/3] rounded-[2rem] glass-card-dark p-6 border border-white/10 overflow-hidden shadow-2xl relative">
-                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(94,92,230,0.15),transparent_50%)]"></div>
-                 
-                 {/* Lecturer Upload Mockup */}
-                 <div className="flex flex-col gap-4 h-full justify-between">
-                    <div className="flex justify-between items-center pb-2 border-b border-white/5">
-                      <span className="text-xs font-bold text-slate-300">Upload New Resource</span>
-                      <span className="text-[10px] font-bold text-campus-300">LECTURER PORTAL</span>
-                    </div>
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(94,92,230,0.15),transparent_50%)]"></div>
 
-                    {/* Drag and Drop Zone Mock */}
-                    <div className="flex-1 rounded-xl border border-dashed border-white/10 bg-white/5 flex flex-col items-center justify-center p-4">
-                       <IoCloudUploadOutline className="text-4xl text-campus-300 mb-2" />
-                       <span className="text-xs font-bold text-white mb-1">Drag file here to upload</span>
-                       <span className="text-[10px] text-slate-400">PDF, DOCX up to 50MB</span>
-                    </div>
+                {/* Lecturer Upload Mockup */}
+                <div className="flex flex-col gap-4 h-full justify-between">
+                  <div className="flex justify-between items-center pb-2 border-b border-white/5">
+                    <span className="text-xs font-bold text-slate-300">Upload New Resource</span>
+                    <span className="text-[10px] font-bold text-campus-300">LECTURER PORTAL</span>
+                  </div>
 
-                    {/* File Upload Progress Item */}
-                    <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex flex-col gap-2">
-                       <div className="flex justify-between text-[10px] font-bold">
-                          <span className="text-white truncate max-w-[70%]">CSC_402_Computer_Graphics.pdf</span>
-                          <span className="text-green-400 font-extrabold">100% Uploaded</span>
-                       </div>
-                       <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
-                          <div className="bg-green-400 h-full w-full"></div>
-                       </div>
-                    </div>
+                  {/* Drag and Drop Zone Mock */}
+                  <div className="flex-1 rounded-xl border border-dashed border-white/10 bg-white/5 flex flex-col items-center justify-center p-4">
+                    <IoCloudUploadOutline className="text-4xl text-campus-300 mb-2" />
+                    <span className="text-xs font-bold text-white mb-1">Drag file here to upload</span>
+                    <span className="text-[10px] text-slate-400">PDF, DOCX up to 50MB</span>
+                  </div>
 
-                    {/* Form Fields & Submit Button */}
-                    <div className="flex gap-2">
-                      <div className="flex-1 bg-white/5 border border-white/10 rounded-full py-1.5 px-3 text-[10px] text-slate-300 flex items-center">
-                        CSC 402
-                      </div>
-                      <button className="rounded-full bg-campus-600 hover:bg-campus-700 px-4 py-2 text-[10px] font-bold text-white shadow-sm transition">
-                        Publish Material
-                      </button>
+                  {/* File Upload Progress Item */}
+                  <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex flex-col gap-2">
+                    <div className="flex justify-between text-[10px] font-bold">
+                      <span className="text-white truncate max-w-[70%]">CSC_402_Computer_Graphics.pdf</span>
+                      <span className="text-green-400 font-extrabold">100% Uploaded</span>
                     </div>
-                 </div>
+                    <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
+                      <div className="bg-green-400 h-full w-full"></div>
+                    </div>
+                  </div>
+
+                  {/* Form Fields & Submit Button */}
+                  <div className="flex gap-2">
+                    <div className="flex-1 bg-white/5 border border-white/10 rounded-full py-1.5 px-3 text-[10px] text-slate-300 flex items-center">
+                      CSC 402
+                    </div>
+                    <button className="rounded-full bg-campus-600 hover:bg-campus-700 px-4 py-2 text-[10px] font-bold text-white shadow-sm transition">
+                      Publish Material
+                    </button>
+                  </div>
+                </div>
               </div>
             </motion.div>
 
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-100px" }}
@@ -354,7 +354,7 @@ export default function LandingPage() {
               <p className="text-lg text-slate-300 mb-8 leading-relaxed">
                 Upload and manage your course materials with unprecedented ease. Keep track of resources and ensure every student has access to knowledge.
               </p>
-              
+
               <div className="space-y-6">
                 {[
                   { icon: <IoCloudUploadOutline />, title: "Streamlined Uploads", desc: "Drag and drop your lecture materials in seconds." },
@@ -383,14 +383,14 @@ export default function LandingPage() {
             <h3 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900 mb-6 max-w-2xl mx-auto">
               Scalable infrastructure for digital preservation.
             </h3>
-            
+
             <div className="mt-16 grid md:grid-cols-3 gap-8">
               {[
                 { icon: <IoShieldCheckmarkOutline />, title: "Centralized Library", desc: "A single, secure repository for all university knowledge and resources." },
                 { icon: <IoStatsChartOutline />, title: "Platform Analytics", desc: "Gain insights into platform usage, active users, and popular materials." },
                 { icon: <IoDocumentTextOutline />, title: "Knowledge Preservation", desc: "Ensure past questions and notes are safely archived for future generations." }
               ].map((item, idx) => (
-                <motion.div 
+                <motion.div
                   key={idx}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}

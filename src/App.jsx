@@ -32,7 +32,8 @@ import Upload from "./pages/Upload";
 
 function AuthenticatedWidgets() {
   const { isAuthenticated } = useAuth();
-  if (!isAuthenticated) return null;
+  const location = useLocation();
+  if (!isAuthenticated || location.pathname === "/chat") return null;
   return <ChatbotWidget />;
 }
 

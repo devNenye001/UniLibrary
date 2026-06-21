@@ -143,7 +143,7 @@ export default function Register() {
   return (
     <AuthLayout maxWidth="max-w-2xl">
       <div className="mb-8 text-center">
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-900 shadow-md mb-6">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl mb-6">
           <img src="/logo1.jpg" alt="Logo" className="h-full w-full rounded-2xl object-cover" />
         </div>
         <h2 className="text-3xl font-bold tracking-tight text-slate-900">Create an account</h2>
