@@ -154,10 +154,7 @@ export default function MaterialDetail() {
         {!loading && material ? (
           <>
             <section className="rounded-4xl border border-slate-200 bg-white p-8 shadow-sm">
-              <p className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-400">
-                Material Detail
-              </p>
-              <div className="mt-4 flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+              <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
                 <div className="max-w-3xl">
                   <span className="inline-flex rounded-full bg-campus-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-campus-700">
                     {material.courseCode || "-"}

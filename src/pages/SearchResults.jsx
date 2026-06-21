@@ -50,7 +50,6 @@ export default function SearchResults() {
               <IoSearchOutline className="text-xl" />
             </div>
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-400">Search</p>
               <h1 className="text-3xl font-semibold text-slate-900">
                 {query ? `Results for "${query}"` : "Search the UniLibrary archive"}
               </h1>

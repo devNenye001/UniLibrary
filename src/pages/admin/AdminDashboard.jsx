@@ -96,7 +96,6 @@ export default function AdminDashboard() {
   return (
     <div className="p-8">
       <AdminPageHeader
-        eyebrow="Dashboard"
         title="Admin Dashboard"
         description="Overview of user activity, pending reviews, and the current state of the UniLibrary platform."
         actions={[

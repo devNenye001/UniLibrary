@@ -51,10 +51,7 @@ export default function RecommendationsPage() {
     <StudentLayout>
       <div className="px-6 py-8">
         <div className="mb-8">
-          <p className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-400">
-            AI Picks
-          </p>
-          <h1 className="mt-3 text-3xl font-semibold text-slate-900">Recommendations</h1>
+          <h1 className="text-3xl font-semibold text-slate-900">Recommendations</h1>
           <p className="mt-2 text-sm leading-7 text-slate-500">
             Suggested materials based on your academic activity and available library resources.
           </p>

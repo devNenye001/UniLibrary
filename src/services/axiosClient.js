@@ -48,7 +48,8 @@ axiosClient.interceptors.response.use(
     }
 
     if (error.response?.status === 401) {
-      const isLoginRequest = error.config?.url?.includes("/auth/login");
+      const url = error.config?.url ?? "";
+      const isLoginRequest = url.includes("login") || url.includes("register");
       if (!isLoginRequest) {
         clearStoredAuth();
         if (window.location.pathname !== "/login") {

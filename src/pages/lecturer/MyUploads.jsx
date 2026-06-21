@@ -278,10 +278,7 @@ export default function MyUploads() {
         {/* Header */}
         <div className="mb-8 flex items-start justify-between gap-4">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-400">
-              Lecturer Portal
-            </p>
-            <h1 className="mt-3 text-3xl font-semibold text-slate-900">My Uploads</h1>
+            <h1 className="text-3xl font-semibold text-slate-900">My Uploads</h1>
             <p className="mt-2 text-sm leading-7 text-slate-500">
               All materials you have contributed to UniLibrary. Edit metadata or remove
               materials that are no longer relevant.

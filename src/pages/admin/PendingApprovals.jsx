@@ -115,7 +115,6 @@ export default function PendingApprovals() {
   return (
     <div className="p-8">
       <AdminPageHeader
-        eyebrow="Approvals"
         title="Pending Approvals"
         description="Review newly registered users and submitted materials waiting for admin action."
       />

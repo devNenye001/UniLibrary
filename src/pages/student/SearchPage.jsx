@@ -74,10 +74,7 @@ export default function SearchPage() {
             <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-campus-100 text-campus-700">
               <IoSparklesOutline className="text-2xl" />
             </div>
-            <p className="mt-5 text-sm font-semibold uppercase tracking-[0.25em] text-slate-400">
-              Semantic Search
-            </p>
-            <h1 className="mt-3 text-3xl font-semibold text-slate-900 md:text-4xl">
+            <h1 className="mt-5 text-3xl font-semibold text-slate-900 md:text-4xl">
               Search the library in plain language
             </h1>
             <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-500">

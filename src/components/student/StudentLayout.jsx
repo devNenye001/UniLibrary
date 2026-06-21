@@ -21,10 +21,10 @@ const NAV_ITEMS = [
 ];
 
 function navClass({ isActive }) {
-  return `flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition ${
+  return `flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition border ${
     isActive
-      ? "bg-campus-100 text-campus-700"
-      : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+      ? "bg-white/70 border-slate-200/40 text-campus-700 shadow-sm font-semibold"
+      : "border-transparent text-slate-600 hover:bg-white/30 hover:text-slate-900"
   }`;
 }
 
@@ -34,14 +34,12 @@ function SidebarInner({ user, onClose }) {
   return (
     <div className="flex h-full flex-col">
       {/* Logo */}
-      <div className="flex items-center justify-between border-b border-slate-200/70 px-5 py-5">
+      <div className="flex items-center justify-between border-b border-slate-200/30 px-5 py-5">
         <Link className="flex items-center gap-3" to="/dashboard">
-          <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-campus-900 text-sm font-bold text-white shadow-lg shadow-campus-900/20">
-            UL
-          </div>
+          <img src="/logo1.jpg" alt="GoLibrary Logo" className="h-10 w-10 rounded-xl object-cover shadow-sm" />
           <div>
-            <p className="text-base font-semibold text-slate-900">UniLibrary</p>
-            <p className="text-xs text-slate-500">Student Portal</p>
+            <p className="text-base font-bold tracking-tight text-slate-900">GoLibrary</p>
+            <p className="text-[10px] font-bold text-campus-600 uppercase tracking-widest">Student Portal</p>
           </div>
         </Link>
         {onClose ? (
@@ -57,9 +55,6 @@ function SidebarInner({ user, onClose }) {
 
       {/* Nav links */}
       <nav className="flex-1 overflow-y-auto px-4 py-5">
-        <p className="mb-3 px-4 text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">
-          Menu
-        </p>
         <ul className="space-y-1">
           {NAV_ITEMS.map((navItem) => {
             const NavIcon = navItem.icon;
@@ -81,16 +76,16 @@ function SidebarInner({ user, onClose }) {
       </nav>
 
       {/* User card at bottom */}
-      <div className="border-t border-slate-200/70 px-4 py-4">
-        <div className="flex items-center gap-3 rounded-2xl bg-slate-50 px-4 py-3">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-campus-100 text-sm font-semibold text-campus-700">
+      <div className="border-t border-slate-200/30 px-4 py-4">
+        <div className="flex items-center gap-3 rounded-2xl bg-white/60 border border-white/80 px-4 py-3 shadow-sm backdrop-blur-md">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-campus-600/10 text-sm font-bold text-campus-700">
             {initial}
           </div>
           <div className="min-w-0">
-            <p className="truncate text-sm font-semibold text-slate-900">
+            <p className="truncate text-xs font-bold text-slate-900">
               {user?.name || "Student"}
             </p>
-            <p className="truncate text-xs text-slate-500">
+            <p className="truncate text-[10px] font-medium text-slate-500">
               {[user?.department, user?.level ? `${user.level} Level` : null]
                 .filter(Boolean)
                 .join(" · ") || "Student"}
@@ -113,9 +108,9 @@ export default function StudentLayout({ children }) {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-50">
+    <div className="flex h-screen overflow-hidden bg-slate-50/50 aurora-bg font-sans">
       {/* ── Desktop sidebar ──────────────────────────────────────── */}
-      <aside className="hidden w-64 shrink-0 border-r border-slate-200/70 bg-white lg:block">
+      <aside className="hidden w-64 shrink-0 border-r border-slate-200/40 bg-white/40 backdrop-blur-2xl lg:block">
         <SidebarInner user={user} />
       </aside>
 
@@ -128,7 +123,7 @@ export default function StudentLayout({ children }) {
             onClick={() => setSidebarOpen(false)}
           />
           {/* Drawer */}
-          <aside className="absolute bottom-0 left-0 top-0 z-10 w-72 bg-white shadow-2xl shadow-slate-900/20">
+          <aside className="absolute bottom-0 left-0 top-0 z-10 w-72 bg-white/60 backdrop-blur-2xl shadow-2xl shadow-slate-900/10 border-r border-white/40">
             <SidebarInner user={user} onClose={() => setSidebarOpen(false)} />
           </aside>
         </div>
@@ -137,7 +132,7 @@ export default function StudentLayout({ children }) {
       {/* ── Right column (topbar + content) ──────────────────────── */}
       <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
         {/* Top bar */}
-        <header className="sticky top-0 z-40 border-b border-slate-200/70 bg-white/90 backdrop-blur">
+        <header className="sticky top-0 z-40 border-b border-slate-200/40 bg-white/40 backdrop-blur-2xl">
           <div className="flex items-center justify-between gap-4 px-6 py-4">
             {/* Left: hamburger (mobile) + mobile logo */}
             <div className="flex items-center gap-4">
@@ -149,10 +144,8 @@ export default function StudentLayout({ children }) {
                 <IoMenuOutline className="text-xl" />
               </button>
               <Link className="flex items-center gap-2 lg:hidden" to="/dashboard">
-                <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-campus-900 text-xs font-bold text-white">
-                  UL
-                </div>
-                <p className="text-sm font-semibold text-slate-900">UniLibrary</p>
+                <img src="/logo1.jpg" alt="GoLibrary Logo" className="h-8 w-8 rounded-lg object-cover shadow-sm" />
+                <p className="text-sm font-bold text-slate-900">GoLibrary</p>
               </Link>
             </div>
 

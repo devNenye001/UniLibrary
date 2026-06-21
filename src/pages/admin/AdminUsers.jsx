@@ -157,7 +157,6 @@ export default function AdminUsers() {
   return (
     <div className="p-8">
       <AdminPageHeader
-        eyebrow="Users"
         title="User Management"
         description="Review all registered accounts, track approval status, and process pending user requests."
       />

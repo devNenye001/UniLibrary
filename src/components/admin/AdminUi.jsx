@@ -1,14 +1,11 @@
 import LoadingSpinner from "../LoadingSpinner.jsx";
 import { STATUS_STYLES } from "./adminUtils.js";
 
-export function AdminPageHeader({ eyebrow, title, description, actions }) {
+export function AdminPageHeader({ title, description, actions }) {
   return (
     <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
       <div>
-        <p className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-400">
-          {eyebrow}
-        </p>
-        <h1 className="mt-3 text-4xl font-semibold text-slate-900">{title}</h1>
+        <h1 className="text-4xl font-semibold text-slate-900">{title}</h1>
         <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-500">{description}</p>
       </div>
       {actions ? <div className="flex flex-wrap gap-3">{actions}</div> : null}

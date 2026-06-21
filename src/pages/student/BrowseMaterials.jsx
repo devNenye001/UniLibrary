@@ -102,10 +102,7 @@ export default function BrowseMaterials() {
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-campus-100 text-campus-700">
                 <IoFilterOutline className="text-xl" />
               </div>
-              <p className="mt-4 text-sm font-semibold uppercase tracking-[0.25em] text-slate-400">
-                Browse Library
-              </p>
-              <h1 className="mt-2 text-3xl font-semibold text-slate-900">
+              <h1 className="mt-4 text-3xl font-semibold text-slate-900">
                 Explore academic materials by filter
               </h1>
               <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-500">

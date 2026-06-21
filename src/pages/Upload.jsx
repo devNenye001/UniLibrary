@@ -93,8 +93,7 @@ export default function Upload() {
       <main className="mx-auto max-w-5xl px-6 py-10">
         <section className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm">
           <div className="max-w-3xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-400">Upload Portal</p>
-            <h1 className="mt-3 text-4xl font-semibold text-slate-900">Contribute new academic documents</h1>
+            <h1 className="text-4xl font-semibold text-slate-900">Contribute new academic documents</h1>
             <p className="mt-4 text-sm leading-7 text-slate-500">
               Lecturers and admins can upload lecture notes, study guides, and past questions to expand the UniLibrary knowledge base.
             </p>

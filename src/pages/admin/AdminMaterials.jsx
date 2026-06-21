@@ -78,7 +78,6 @@ export default function AdminMaterials() {
   return (
     <div className="p-8">
       <AdminPageHeader
-        eyebrow="Materials"
         title="Material Management"
         description="Review all library resources, filter them by academic details, and remove items when necessary."
       />
