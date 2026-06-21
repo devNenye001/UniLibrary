@@ -48,11 +48,14 @@ axiosClient.interceptors.response.use(
     }
 
     if (error.response?.status === 401) {
-      clearStoredAuth();
-      if (window.location.pathname !== "/login") {
-        window.location.replace("/login");
+      const isLoginRequest = error.config?.url?.includes("/auth/login");
+      if (!isLoginRequest) {
+        clearStoredAuth();
+        if (window.location.pathname !== "/login") {
+          window.location.replace("/login");
+        }
+        return Promise.reject(new Error("Session expired. Please log in again."));
       }
-      return Promise.reject(new Error("Session expired. Please log in again."));
     }
 
     const message =

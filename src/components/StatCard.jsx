@@ -1,7 +1,9 @@
+import { motion } from "framer-motion";
+
 const PALETTE = {
   campus: {
-    bg: "bg-campus-100",
-    icon: "text-campus-700",
+    bg: "bg-campus-600/10",
+    icon: "text-campus-600",
   },
   amber: {
     bg: "bg-amber-50",
@@ -29,17 +31,21 @@ export default function StatCard({ title, value, icon: Icon, color = "campus", s
   const styles = PALETTE[color] ?? PALETTE.campus;
 
   return (
-    <div className="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm">
+    <motion.div 
+      whileHover={{ y: -4, scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 400, damping: 25 }}
+      className="glass-card p-6 flex flex-col transition-all hover:shadow-[0_16px_40px_rgba(0,0,0,0.06)]"
+    >
       <div
-        className={`flex h-10 w-10 items-center justify-center rounded-2xl ${styles.bg}`}
+        className={`flex h-12 w-12 items-center justify-center rounded-[1.25rem] ${styles.bg}`}
       >
-        {Icon ? <Icon className={`h-5 w-5 ${styles.icon}`} /> : null}
+        {Icon ? <Icon className={`h-6 w-6 ${styles.icon}`} /> : null}
       </div>
-      <p className="mt-4 truncate text-2xl font-semibold text-slate-900">{value ?? "—"}</p>
-      <p className="mt-1 text-sm font-medium text-slate-700">{title}</p>
+      <p className="mt-5 truncate text-3xl font-bold tracking-tight text-slate-900">{value ?? "—"}</p>
+      <p className="mt-1 text-sm font-semibold text-slate-500">{title}</p>
       {subtitle ? (
-        <p className="mt-0.5 truncate text-xs text-slate-400">{subtitle}</p>
+        <p className="mt-1 truncate text-xs text-slate-400 font-medium">{subtitle}</p>
       ) : null}
-    </div>
+    </motion.div>
   );
 }

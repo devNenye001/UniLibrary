@@ -37,18 +37,18 @@ export default function MaterialCard({
 
   return (
     <Motion.article
-      whileHover={{ y: -4 }}
-      transition={{ duration: 0.18, ease: "easeOut" }}
-      className="flex flex-col rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-lg hover:shadow-campus-900/8"
+      whileHover={{ y: -6, scale: 1.01 }}
+      transition={{ type: "spring", stiffness: 400, damping: 25 }}
+      className="flex flex-col glass-card p-6 transition-all hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
     >
       <div className="flex items-start justify-between gap-2">
-        <span className="inline-flex rounded-full bg-campus-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-campus-700">
+        <span className="inline-flex rounded-full bg-campus-600/10 px-3 py-1 text-xs font-bold tracking-widest text-campus-700">
           {courseCode || "-"}
         </span>
         <div className="flex flex-wrap items-center justify-end gap-2">
           {badge}
           {downloadCount != null ? (
-            <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-500">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100/80 px-3 py-1 text-xs font-semibold text-slate-500 backdrop-blur-md">
               <IoDownloadOutline />
               {downloadCount}
             </span>
@@ -56,35 +56,35 @@ export default function MaterialCard({
         </div>
       </div>
 
-      <h3 className="mt-4 line-clamp-2 text-base font-semibold leading-snug text-slate-900">
+      <h3 className="mt-5 line-clamp-2 text-lg font-bold leading-snug text-slate-900 tracking-tight">
         {title || "Untitled Material"}
       </h3>
 
-      <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 text-xs text-slate-500">
+      <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-slate-500">
         {department ? (
           <span className="inline-flex items-center gap-1.5">
-            <IoSchoolOutline className="shrink-0" />
+            <IoSchoolOutline className="shrink-0 text-slate-400" />
             {department}
           </span>
         ) : null}
         {level ? (
           <span className="inline-flex items-center gap-1.5">
-            <IoLayersOutline className="shrink-0" />
+            <IoLayersOutline className="shrink-0 text-slate-400" />
             {level} Level
           </span>
         ) : null}
         {academicSession ? (
           <span className="inline-flex items-center gap-1.5">
-            <IoCalendarOutline className="shrink-0" />
+            <IoCalendarOutline className="shrink-0 text-slate-400" />
             {academicSession}
           </span>
         ) : null}
       </div>
 
-      <div className="mt-auto pt-5">
+      <div className="mt-auto pt-6">
         <button
           onClick={handleView}
-          className="w-full rounded-2xl bg-campus-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-campus-700 active:scale-[0.98]"
+          className="w-full rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-md transition-all hover:bg-slate-800 hover:shadow-lg active:scale-95"
         >
           {actionLabel}
         </button>

@@ -12,12 +12,6 @@ const ROLE_REDIRECTS = {
   admin: "/admin/dashboard",
 };
 
-const LEFT_FEATURES = [
-  "Students discover notes, past questions, and AI recommendations.",
-  "Lecturers upload academic documents and expand the knowledge base.",
-  "Admins review activity and manage platform oversight.",
-];
-
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
@@ -29,7 +23,7 @@ export default function Login() {
   const { login } = useAuth();
 
   useEffect(() => {
-    document.title = "UniLibrary | Login";
+    document.title = "GoLibrary | Login";
     axiosClient.get("/health").catch(() => {});
   }, []);
 
@@ -88,15 +82,13 @@ export default function Login() {
   };
 
   return (
-    <AuthLayout
-      heading="Sign in to your university digital library."
-      description="Access AI-powered search, curated recommendations, lecture materials, and department archives from one portal."
-      features={LEFT_FEATURES}
-      gridCols="md:grid-cols-[1.1fr_0.9fr]"
-    >
-      <div className="mb-8">
-        <h2 className="text-3xl font-semibold text-slate-900">Welcome back</h2>
-        <p className="mt-2 text-sm text-slate-500">Continue to your UniLibrary dashboard.</p>
+    <AuthLayout maxWidth="max-w-md">
+      <div className="mb-8 text-center">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-900 shadow-md mb-6">
+          <img src="/logo1.jpg" alt="Logo" className="h-full w-full rounded-2xl object-cover" />
+        </div>
+        <h2 className="text-3xl font-bold tracking-tight text-slate-900">Welcome back</h2>
+        <p className="mt-2 text-sm text-slate-500">Continue to your GoLibrary dashboard.</p>
       </div>
 
       <form className="space-y-5" onSubmit={handleSubmit} noValidate>

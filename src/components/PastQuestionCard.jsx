@@ -9,38 +9,39 @@ export default function PastQuestionCard({ pq }) {
   
   return (
     <Motion.div 
-      whileHover={{ y: -5 }}
-      className="bg-white border border-blue-50 rounded-2xl shadow-sm hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-300 p-5 flex flex-col font-['DM_Sans']"
+      whileHover={{ y: -6, scale: 1.01 }}
+      transition={{ type: "spring", stiffness: 400, damping: 25 }}
+      className="glass-card p-6 flex flex-col transition-all hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
     >
       {/* Container for Preview */}
-      <div className="w-full h-32 bg-gray-100 flex items-center justify-center rounded-xl mb-4 overflow-hidden border border-blue-50/20 group">
+      <div className="w-full h-32 bg-white/50 backdrop-blur-sm flex items-center justify-center rounded-xl mb-5 overflow-hidden border border-white/40 shadow-inner group">
         {imageSrc ? (
           <img 
             src={imageSrc} 
             alt={pq.title} 
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
         ) : (
-          <span className="text-xs text-gray-400">No preview</span>
+          <span className="text-xs font-medium text-slate-400 tracking-widest uppercase">No preview</span>
         )}
       </div>
 
-      <h3 className="font-semibold text-gray-800 text-sm truncate">
+      <h3 className="font-bold text-slate-900 text-lg tracking-tight truncate">
         {pq.title || "Untitled Question"}
       </h3>
-      <p className="text-xs font-semibold text-blue-600 mt-1 uppercase tracking-tight">
+      <p className="text-xs font-bold text-campus-600 mt-1 uppercase tracking-widest">
         {pq.courseCode}
       </p>
-      <p className="text-xs font-normal text-gray-400 mt-0.5 mb-3">
+      <p className="text-sm font-medium text-slate-500 mt-1 mb-5">
         {pq.year}
       </p>
 
       <button
         onClick={() => navigate(`/view-pq/${pq.slug}`)}
-        className="mt-auto bg-blue-600 cursor-pointer text-white text-sm font-semibold py-2 rounded-xl hover:bg-blue-700 shadow-lg shadow-blue-200 transition-all active:scale-95"
+        className="mt-auto rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-md transition-all hover:bg-slate-800 hover:shadow-lg active:scale-95"
       >
         View Question
       </button>
     </Motion.div>
   );
-} 
+}

@@ -121,16 +121,18 @@ export default function MaterialDetail() {
 
     downloadMaterial(id)
       .then((updated) => {
-        setMaterial((current) => ({
-          ...current,
-          ...(updated || {}),
-          downloadCount: Number(
-            updated?.downloadCount ?? current?.downloadCount ?? 0,
-          ),
-          downloads: Number(
-            updated?.downloads ?? updated?.downloadCount ?? current?.downloads ?? 0,
-          ),
-        }));
+        setMaterial((current) => {
+          const count = Number(
+            updated?.downloadCount ??
+            updated?.material?.downloadCount ??
+            (current?.downloadCount ?? 0) + 1
+          );
+          return {
+            ...current,
+            downloadCount: count,
+            downloads: count,
+          };
+        });
       })
       .catch(() => {
         toast.error("Download started, but the download count could not be updated.");

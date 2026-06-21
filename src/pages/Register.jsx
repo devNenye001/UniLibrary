@@ -46,11 +46,7 @@ const DEPARTMENTS = [
 
 const LEVELS = ["100", "200", "300", "400", "500"];
 
-const LEFT_FEATURES = [
-  "Students discover notes, past questions, and AI recommendations.",
-  "Lecturers upload academic documents and expand the knowledge base.",
-  "Admins review activity and manage platform oversight.",
-];
+
 
 const initialForm = {
   name: "",
@@ -71,7 +67,7 @@ export default function Register() {
   const [slowRequest, setSlowRequest] = useState(false);
 
   useEffect(() => {
-    document.title = "UniLibrary | Register";
+    document.title = "GoLibrary | Register";
     axiosClient.get("/health").catch(() => { });
   }, []);
 
@@ -145,18 +141,13 @@ export default function Register() {
   };
 
   return (
-    <AuthLayout
-      heading="Create a role-aware academic workspace."
-      description="Students can search and study, lecturers can upload course materials, and admins monitor the whole platform from one shared system."
-      features={LEFT_FEATURES}
-      variant="scrollable"
-      maxWidth="max-w-6xl"
-      gridCols="md:grid-cols-[0.95fr_1.05fr]"
-    >
-      <div className="mb-8">
-        <h2 className="text-3xl font-semibold text-slate-900">Register</h2>
-        <p className="mt-2 text-sm text-slate
-        -500">Set up your UniLibrary account.</p>
+    <AuthLayout maxWidth="max-w-2xl">
+      <div className="mb-8 text-center">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-900 shadow-md mb-6">
+          <img src="/logo1.jpg" alt="Logo" className="h-full w-full rounded-2xl object-cover" />
+        </div>
+        <h2 className="text-3xl font-bold tracking-tight text-slate-900">Create an account</h2>
+        <p className="mt-2 text-sm text-slate-500">Set up your GoLibrary account.</p>
       </div>
 
       {successMessage ? (
