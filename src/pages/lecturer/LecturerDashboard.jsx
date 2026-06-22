@@ -99,10 +99,7 @@ export default function LecturerDashboard() {
         {/* Hero */}
         <section className="grid gap-6 rounded-4xl bg-[linear-gradient(135deg,#0d1c30_0%,#173456_60%,#234876_100%)] px-8 py-10 text-white shadow-[0_30px_80px_rgba(15,23,42,0.18)] md:grid-cols-[1fr_auto]">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-sky-200">
-              Lecturer Dashboard
-            </p>
-            <h1 className="mt-4 text-4xl font-semibold leading-tight">
+            <h1 className="text-4xl font-semibold leading-tight">
               Welcome back,{" "}
               <span className="text-sky-200">{user?.name?.split(" ")[0] || "Lecturer"}</span>.
             </h1>
