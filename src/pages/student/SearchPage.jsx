@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   IoArrowForward,
   IoSearchOutline,
@@ -36,7 +36,10 @@ function formatScore(score) {
 
 export default function SearchPage() {
   const navigate = useNavigate();
-  const [query, setQuery] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const queryParam = searchParams.get("q") || "";
+
+  const [query, setQuery] = useState(queryParam);
   const [submittedQuery, setSubmittedQuery] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -46,49 +49,52 @@ export default function SearchPage() {
     document.title = "UniLibrary | Search";
   }, []);
 
-  const handleSubmit = async (event) => {
+  useEffect(() => {
+    const trimmed = queryParam.trim();
+    setQuery(trimmed);
+
+    if (trimmed) {
+      const performSearch = async () => {
+        setLoading(true);
+        setError("");
+        setSubmittedQuery(trimmed);
+        try {
+          const data = await searchMaterials(trimmed);
+          setResults(data);
+        } catch (searchError) {
+          setError(searchError.message || "Unable to search materials right now.");
+          setResults([]);
+        } finally {
+          setLoading(false);
+        }
+      };
+      performSearch();
+    } else {
+      setSubmittedQuery("");
+      setResults([]);
+      setError("");
+    }
+  }, [queryParam]);
+
+  const handleSubmit = (event) => {
     event.preventDefault();
     const trimmedQuery = query.trim();
     if (!trimmedQuery) return;
-
-    setLoading(true);
-    setError("");
-    setSubmittedQuery(trimmedQuery);
-
-    try {
-      const data = await searchMaterials(trimmedQuery);
-      setResults(data);
-    } catch (searchError) {
-      setError(searchError.message || "Unable to search materials right now.");
-      setResults([]);
-    } finally {
-      setLoading(false);
-    }
+    setSearchParams({ q: trimmedQuery });
   };
 
   return (
     <StudentLayout>
       <div className="px-6 py-8">
-        <section className="rounded-[2rem] border border-slate-200 bg-white px-6 py-10 shadow-sm md:px-10">
-          <div className="mx-auto flex max-w-4xl flex-col items-center text-center">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-campus-100 text-campus-700">
-              <IoSparklesOutline className="text-2xl" />
-            </div>
-            <h1 className="mt-5 text-3xl font-semibold text-slate-900 md:text-4xl">
-              Search the library in plain language
-            </h1>
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-500">
-              Describe what you need naturally and UniLibrary will search across
-              materials, course archives, and related academic resources.
-            </p>
-
-            <form className="mt-8 w-full max-w-3xl" onSubmit={handleSubmit}>
-              <div className="rounded-[1.75rem] border border-slate-200 bg-slate-50 p-3 shadow-sm">
+        <div className="mx-auto max-w-4xl">
+          {!queryParam && (
+            <form onSubmit={handleSubmit} className="w-full">
+              <div className="rounded-[1.75rem] border border-slate-200 bg-white p-3 shadow-sm">
                 <div className="flex flex-col gap-3 md:flex-row md:items-center">
                   <div className="relative flex-1">
                     <IoSearchOutline className="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-xl text-slate-400" />
                     <input
-                      className="w-full rounded-[1.25rem] border border-slate-200 bg-white py-4 pl-13 pr-4 text-sm outline-none transition focus:border-campus-600 focus:ring-4 focus:ring-campus-100"
+                      className="w-full rounded-[1.25rem] border border-slate-200 bg-slate-50 py-4 pl-13 pr-4 text-sm outline-none transition focus:border-campus-600 focus:bg-white focus:ring-4 focus:ring-campus-100"
                       onChange={(event) => setQuery(event.target.value)}
                       placeholder="e.g. 300 level civil engineering past questions 2022"
                       type="search"
@@ -106,20 +112,20 @@ export default function SearchPage() {
                 </div>
               </div>
             </form>
+          )}
 
-            {submittedQuery ? (
-              <p className="mt-5 text-sm text-slate-500">
-                {loading ? "Searching..." : `Results for "${submittedQuery}"`}
-              </p>
-            ) : null}
+          {submittedQuery ? (
+            <p className="mt-5 text-sm font-medium text-slate-500">
+              {loading ? "Searching..." : `Results for "${submittedQuery}"`}
+            </p>
+          ) : null}
 
-            {error ? (
-              <div className="mt-6 w-full max-w-3xl rounded-[1.5rem] border border-rose-200 bg-rose-50 px-5 py-4 text-left text-sm text-rose-700">
-                {error}
-              </div>
-            ) : null}
-          </div>
-        </section>
+          {error ? (
+            <div className="mt-6 w-full rounded-[1.5rem] border border-rose-200 bg-rose-50 px-5 py-4 text-left text-sm text-rose-700">
+              {error}
+            </div>
+          ) : null}
+        </div>
 
         <section className="mt-8">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

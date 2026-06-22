@@ -9,6 +9,7 @@ import {
   IoLogOutOutline,
   IoMenuOutline,
   IoPeopleOutline,
+  IoSearchOutline,
 } from "react-icons/io5";
 import { useAuth } from "../../context/AuthContext.jsx";
 
@@ -92,12 +93,21 @@ function SidebarInner({ user, onClose }) {
 
 export default function AdminLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
     navigate("/login");
+  };
+
+  const handleSearch = (event) => {
+    event.preventDefault();
+    const trimmed = searchQuery.trim();
+    if (!trimmed) return;
+    navigate(`/search?q=${encodeURIComponent(trimmed)}`);
+    setSearchQuery("");
   };
 
   return (
@@ -133,20 +143,37 @@ export default function AdminLayout({ children }) {
                 <img src="/logo1.jpg" alt="GoLibrary Logo" className="h-8 w-8 rounded-lg object-cover shadow-sm" />
                 <p className="text-sm font-bold text-slate-900">GoLibrary</p>
               </Link>
+              <Link
+                className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 text-slate-600 transition hover:bg-slate-100 md:hidden"
+                to="/search"
+                aria-label="Search"
+              >
+                <IoSearchOutline className="text-base" />
+              </Link>
+            </div>
+
+            {/* Middle: Search input (desktop) */}
+            <div className="hidden max-w-md flex-1 md:block">
+              <form onSubmit={handleSearch} className="relative w-full">
+                <IoSearchOutline className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-base" />
+                <input
+                  type="text"
+                  placeholder="Search materials in plain language..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full rounded-full border border-slate-200 bg-slate-50 py-2 pl-11 pr-4 text-sm outline-none transition focus:border-campus-600 focus:bg-white focus:ring-4 focus:ring-campus-100"
+                />
+              </form>
             </div>
 
             <div className="flex items-center gap-3">
-              <div className="hidden text-right md:block">
-                <p className="text-sm font-semibold text-slate-900">{user?.name || "Admin"}</p>
-                <p className="text-xs text-slate-500">Administrator</p>
-              </div>
               <button
                 className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-slate-300 hover:bg-slate-100"
                 onClick={handleLogout}
                 type="button"
               >
                 <IoLogOutOutline className="text-base" />
-                <span className="hidden sm:inline">Logout</span>
+                <span>Logout</span>
               </button>
             </div>
           </div>
