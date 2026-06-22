@@ -88,7 +88,7 @@ export default function SearchPage() {
       <div className="px-6 py-8">
         <div className="mx-auto max-w-4xl">
           {!queryParam && (
-            <form onSubmit={handleSubmit} className="w-full">
+            <form onSubmit={handleSubmit} className="w-full md:hidden">
               <div className="rounded-[1.75rem] border border-slate-200 bg-white p-3 shadow-sm">
                 <div className="flex flex-col gap-3 md:flex-row md:items-center">
                   <div className="relative flex-1">
