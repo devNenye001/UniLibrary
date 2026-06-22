@@ -110,7 +110,7 @@ export default function ChatbotPage() {
   const inputRef = useRef(null);
 
   useEffect(() => {
-    document.title = "UniLibrary | Chat Assistant";
+    document.title = "GoLibrary | Chat Assistant";
   }, []);
 
   useEffect(() => {
@@ -163,19 +163,6 @@ export default function ChatbotPage() {
   return (
     <RoleLayout role={role}>
       <div className="flex flex-col h-[calc(100vh-4.5rem)] bg-slate-50/50">
-        {/* Top Header */}
-        <div className="border-b border-slate-200/50 bg-white/40 px-6 py-4 backdrop-blur-md">
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-campus-100 text-campus-700">
-              <Bot className="h-5 w-5" />
-            </div>
-            <div>
-              <h1 className="text-base font-bold text-slate-900">Library Assistant</h1>
-              <p className="text-[10px] font-medium text-slate-500">Ask for materials, past questions, course notes, or recommendations</p>
-            </div>
-          </div>
-        </div>
-
         {/* Message Area */}
         <div className="flex-1 overflow-y-auto px-4 py-8 md:px-6">
           <div className="mx-auto max-w-3xl space-y-6">
@@ -192,12 +179,6 @@ export default function ChatbotPage() {
                 <div className="flex h-16 w-16 items-center justify-center rounded-[2rem] bg-campus-600 text-white shadow-lg">
                   <Bot className="h-8 w-8" />
                 </div>
-                <h2 className="mt-6 text-3xl font-bold tracking-tight text-slate-900">
-                  Chat with UniLibrary
-                </h2>
-                <p className="mt-3 max-w-md text-sm leading-relaxed text-slate-500">
-                  Ask for materials, past questions, course notes, or recommendations and get direct links to matching documents.
-                </p>
 
                 {/* Starter Prompts Grid inside Chat Area */}
                 <div className="mt-12 w-full max-w-2xl">
