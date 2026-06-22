@@ -174,17 +174,7 @@ export default function SearchPage() {
                       </button>
                     </div>
                   )
-                  : (
-                    <div className="col-span-full rounded-[1.75rem] border border-dashed border-slate-300 bg-white px-6 py-12 text-center">
-                      <p className="text-lg font-semibold text-slate-900">
-                        Start with a natural language search
-                      </p>
-                      <p className="mt-2 text-sm leading-7 text-slate-500">
-                        Ask for a course, department, year, level, or material type in one
-                        sentence to discover relevant documents.
-                      </p>
-                    </div>
-                  )}
+                  : null}
           </div>
         </section>
       </div>

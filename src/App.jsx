@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
+import axiosClient from "./services/axiosClient";
 import { AnimatePresence } from "framer-motion";
 import ChatbotWidget from "./components/ChatbotWidget";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -207,6 +209,18 @@ function AnimatedRoutes() {
 }
 
 export default function App() {
+  useEffect(() => {
+    // Initial wake-up ping to wake up Render free tier backend instantly on client load
+    axiosClient.get("/health").catch(() => {});
+
+    // Periodic ping every 5 minutes to keep it awake while any client is active
+    const interval = setInterval(() => {
+      axiosClient.get("/health").catch(() => {});
+    }, 5 * 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <Toaster
