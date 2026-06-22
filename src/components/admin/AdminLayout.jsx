@@ -155,7 +155,6 @@ export default function AdminLayout({ children }) {
             {/* Middle: Search input (desktop) */}
             <div className="hidden max-w-md flex-1 md:block">
               <form onSubmit={handleSearch} className="relative w-full">
-                <IoSearchOutline className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-base" />
                 <input
                   type="text"
                   placeholder="Search materials in plain language..."
@@ -163,6 +162,7 @@ export default function AdminLayout({ children }) {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full rounded-full border border-slate-200 bg-slate-50 py-2 pl-11 pr-4 text-sm outline-none transition focus:border-campus-600 focus:bg-white focus:ring-4 focus:ring-campus-100"
                 />
+                <IoSearchOutline className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-base" />
               </form>
             </div>
 
