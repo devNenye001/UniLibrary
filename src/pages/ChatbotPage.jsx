@@ -162,92 +162,90 @@ export default function ChatbotPage() {
 
   return (
     <RoleLayout role={role}>
-      <div className="px-6 py-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-semibold text-slate-900">Chat with UniLibrary</h1>
-          <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-500">
-            Ask for materials, past questions, course notes, or recommendations and get direct
-            links to matching documents.
-          </p>
+      <div className="flex flex-col h-[calc(100vh-4.5rem)] bg-slate-50/50">
+        {/* Top Header */}
+        <div className="border-b border-slate-200/50 bg-white/40 px-6 py-4 backdrop-blur-md">
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-campus-100 text-campus-700">
+              <Bot className="h-5 w-5" />
+            </div>
+            <div>
+              <h1 className="text-base font-bold text-slate-900">Library Assistant</h1>
+              <p className="text-[10px] font-medium text-slate-500">Ask for materials, past questions, course notes, or recommendations</p>
+            </div>
+          </div>
         </div>
 
-        <section className="grid gap-6 xl:grid-cols-[320px_minmax(0,1fr)]">
-          <div className="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-campus-100">
-              <Bot className="h-6 w-6 text-campus-700" />
-            </div>
-            <p className="mt-4 text-lg font-semibold text-slate-900">Starter prompts</p>
-            <p className="mt-2 text-sm leading-7 text-slate-500">
-              Use one of these to get quick results from the assistant.
-            </p>
-            <div className="mt-5 flex flex-col gap-3">
-              {STARTER_PROMPTS.map((prompt) => (
-                <button
-                  key={prompt}
-                  className="rounded-2xl border border-campus-200 bg-campus-50 px-4 py-3 text-left text-sm font-medium text-campus-700 transition hover:border-campus-300 hover:bg-campus-100"
-                  onClick={() => sendMessage(prompt)}
-                  type="button"
-                >
-                  {prompt}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex min-h-[70vh] flex-col overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm">
-            <div className="border-b border-slate-200 bg-campus-900 px-6 py-5">
-              <p className="text-sm font-semibold text-white">Library Assistant</p>
-              <p className="mt-1 text-xs text-sky-200/80">
-                Search the library in plain language and open results directly.
-              </p>
-            </div>
-
-            <div className="flex-1 space-y-4 overflow-y-auto bg-slate-50 px-6 py-6">
-              {messages.length ? (
-                <>
-                  {messages.map((msg, index) => (
-                    <MessageBubble key={index} msg={msg} />
-                  ))}
-                  {typing ? <TypingIndicator /> : null}
-                </>
-              ) : (
-                <div className="flex h-full min-h-[24rem] flex-col items-center justify-center text-center">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-[1.5rem] bg-campus-100">
-                    <Bot className="h-8 w-8 text-campus-700" />
-                  </div>
-                  <p className="mt-5 text-lg font-semibold text-slate-900">
-                    Start a conversation
-                  </p>
-                  <p className="mt-2 max-w-md text-sm leading-7 text-slate-500">
-                    Ask about documents by course code, department, level, or topic and the
-                    assistant will suggest matching materials.
-                  </p>
+        {/* Message Area */}
+        <div className="flex-1 overflow-y-auto px-4 py-8 md:px-6">
+          <div className="mx-auto max-w-3xl space-y-6">
+            {messages.length ? (
+              <>
+                {messages.map((msg, index) => (
+                  <MessageBubble key={index} msg={msg} />
+                ))}
+                {typing ? <TypingIndicator /> : null}
+              </>
+            ) : (
+              /* ChatGPT Empty State */
+              <div className="flex flex-col items-center justify-center py-12 text-center">
+                <div className="flex h-16 w-16 items-center justify-center rounded-[2rem] bg-campus-600 text-white shadow-lg">
+                  <Bot className="h-8 w-8" />
                 </div>
-              )}
-              <div ref={bottomRef} />
-            </div>
+                <h2 className="mt-6 text-3xl font-bold tracking-tight text-slate-900">
+                  Chat with UniLibrary
+                </h2>
+                <p className="mt-3 max-w-md text-sm leading-relaxed text-slate-500">
+                  Ask for materials, past questions, course notes, or recommendations and get direct links to matching documents.
+                </p>
 
-            <div className="border-t border-slate-200 bg-white px-6 py-4">
-              <form className="flex items-center gap-3" onSubmit={handleSubmit}>
-                <input
-                  ref={inputRef}
-                  className="flex-1 rounded-full border border-slate-200 bg-slate-50 px-5 py-3 text-sm outline-none transition focus:border-campus-300 focus:bg-white focus:ring-4 focus:ring-campus-100 disabled:opacity-50"
-                  disabled={typing}
-                  onChange={(event) => setInput(event.target.value)}
-                  placeholder="Ask about materials..."
-                  value={input}
-                />
-                <button
-                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-campus-600 text-white transition hover:bg-campus-700 disabled:cursor-not-allowed disabled:opacity-40"
-                  disabled={!input.trim() || typing}
-                  type="submit"
-                >
-                  <Send className="h-4 w-4" />
-                </button>
-              </form>
-            </div>
+                {/* Starter Prompts Grid inside Chat Area */}
+                <div className="mt-12 w-full max-w-2xl">
+                  <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">Starter prompts</p>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {STARTER_PROMPTS.map((prompt) => (
+                      <button
+                        key={prompt}
+                        className="rounded-2xl border border-slate-200 bg-white p-4 text-left text-xs font-semibold text-slate-700 shadow-sm transition hover:border-campus-300 hover:bg-slate-50 hover:shadow-md"
+                        onClick={() => sendMessage(prompt)}
+                        type="button"
+                      >
+                        {prompt}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+            <div ref={bottomRef} />
           </div>
-        </section>
+        </div>
+
+        {/* Input Area (ChatGPT Style Pill) */}
+        <div className="bg-gradient-to-t from-slate-50 to-slate-50/0 px-4 py-6">
+          <div className="mx-auto max-w-3xl">
+            <form onSubmit={handleSubmit} className="relative">
+              <input
+                ref={inputRef}
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                disabled={typing}
+                placeholder="Ask about materials..."
+                className="w-full rounded-[2rem] border border-slate-200 bg-white py-4 pl-6 pr-14 text-sm shadow-sm outline-none transition focus:border-campus-600 focus:ring-4 focus:ring-campus-100 disabled:opacity-50"
+              />
+              <button
+                type="submit"
+                disabled={!input.trim() || typing}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-slate-900 text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-30"
+              >
+                <Send className="h-4 w-4" />
+              </button>
+            </form>
+            <p className="mt-2.5 text-center text-[10px] text-slate-400">
+              Library Assistant can make mistakes. Verify matching course codes and session details.
+            </p>
+          </div>
+        </div>
       </div>
     </RoleLayout>
   );
