@@ -1,4 +1,4 @@
-const AUTH_STORAGE_KEY = "unilibrary_auth";
+const AUTH_STORAGE_KEY = "golibrary_auth";
 
 function decodeJwt(token) {
   try {

@@ -26,7 +26,7 @@ export default function Upload() {
   const [status, setStatus] = useState({ type: "", message: "" });
 
   useEffect(() => {
-    document.title = "UniLibrary | Upload";
+    document.title = "GoLibrary | Upload";
   }, []);
 
   const validate = () => {
@@ -95,7 +95,7 @@ export default function Upload() {
           <div className="max-w-3xl">
             <h1 className="text-4xl font-semibold text-slate-900">Contribute new academic documents</h1>
             <p className="mt-4 text-sm leading-7 text-slate-500">
-              Lecturers and admins can upload lecture notes, study guides, and past questions to expand the UniLibrary knowledge base.
+              Lecturers and admins can upload lecture notes, study guides, and past questions to expand the GoLibrary knowledge base.
             </p>
           </div>
 

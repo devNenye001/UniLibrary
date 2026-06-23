@@ -26,7 +26,7 @@ export default function AdminMaterials() {
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
-    document.title = "UniLibrary | Material Management";
+    document.title = "GoLibrary | Material Management";
   }, []);
 
   useEffect(() => {

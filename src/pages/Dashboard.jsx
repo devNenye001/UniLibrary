@@ -20,7 +20,7 @@ export default function Dashboard() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    document.title = "UniLibrary | Dashboard";
+    document.title = "GoLibrary | Dashboard";
   }, []);
 
   useEffect(() => {
@@ -62,7 +62,7 @@ export default function Dashboard() {
               Welcome back, {user?.name || "Scholar"}.
             </h1>
             <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300">
-              UniLibrary gives you a focused view of documents, AI recommendations, and role-specific actions for your academic workflow.
+              GoLibrary gives you a focused view of documents, AI recommendations, and role-specific actions for your academic workflow.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link className="rounded-full bg-white px-5 py-3 text-sm font-semibold text-campus-700 transition hover:bg-slate-100" to="/search">
@@ -181,7 +181,7 @@ export default function Dashboard() {
                   Lecturers can upload lecture notes, revision packs, and academic resources.
                 </div>
                 <div className="rounded-3xl bg-slate-50 px-4 py-4">
-                  Admins can review system metrics from the UniLibrary admin panel.
+                  Admins can review system metrics from the GoLibrary admin panel.
                 </div>
               </div>
             </section>

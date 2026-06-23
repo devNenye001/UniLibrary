@@ -162,7 +162,7 @@ export default function ViewHistory() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    document.title = "UniLibrary | View History";
+    document.title = "GoLibrary | View History";
   }, []);
 
   useEffect(() => {

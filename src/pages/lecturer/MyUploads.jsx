@@ -236,7 +236,7 @@ export default function MyUploads() {
   const [toast, setToast] = useState({ type: "", message: "" });
 
   useEffect(() => {
-    document.title = "UniLibrary | My Uploads";
+    document.title = "GoLibrary | My Uploads";
   }, []);
 
   useEffect(() => {
@@ -280,7 +280,7 @@ export default function MyUploads() {
           <div>
             <h1 className="text-3xl font-semibold text-slate-900">My Uploads</h1>
             <p className="mt-2 text-sm leading-7 text-slate-500">
-              All materials you have contributed to UniLibrary. Edit metadata or remove
+              All materials you have contributed to GoLibrary. Edit metadata or remove
               materials that are no longer relevant.
             </p>
           </div>

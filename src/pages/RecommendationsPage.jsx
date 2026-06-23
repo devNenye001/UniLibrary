@@ -25,7 +25,7 @@ export default function RecommendationsPage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    document.title = "UniLibrary | Recommendations";
+    document.title = "GoLibrary | Recommendations";
   }, []);
 
   useEffect(() => {

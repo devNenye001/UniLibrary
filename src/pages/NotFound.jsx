@@ -7,9 +7,9 @@ export default function NotFound() {
     <div className="flex min-h-screen flex-col items-center justify-center bg-slate-50 px-6 text-center">
       <div className="mb-8 flex items-center gap-2.5">
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-campus-900">
-          <span className="text-lg font-bold text-white">U</span>
+          <span className="text-lg font-bold text-white">G</span>
         </div>
-        <span className="text-xl font-bold tracking-tight text-campus-900">UniLibrary</span>
+        <span className="text-xl font-bold tracking-tight text-campus-900">GoLibrary</span>
       </div>
 
       <div className="mb-4 text-[7rem] font-extrabold leading-none tracking-tight text-campus-900/10 select-none">

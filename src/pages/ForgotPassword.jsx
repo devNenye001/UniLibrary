@@ -6,7 +6,7 @@ import InputField from "../components/auth/InputField.jsx";
 import { forgotPassword } from "../services/api.js";
 
 const LEFT_FEATURES = [
-  "Enter the email address linked to your UniLibrary account.",
+  "Enter the email address linked to your GoLibrary account.",
   "A secure password reset link will be sent to your inbox.",
   "The link expires after 30 minutes for your security.",
 ];
@@ -18,7 +18,7 @@ export default function ForgotPassword() {
   const [sent, setSent] = useState(false);
 
   useEffect(() => {
-    document.title = "UniLibrary | Forgot Password";
+    document.title = "GoLibrary | Forgot Password";
   }, []);
 
   const handleSubmit = async (e) => {

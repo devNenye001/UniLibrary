@@ -48,7 +48,7 @@ export default function BrowseMaterials() {
   const [pagination, setPagination] = useState({ total: 0, totalPages: 1, pageSize: 12 });
 
   useEffect(() => {
-    document.title = "UniLibrary | Browse Materials";
+    document.title = "GoLibrary | Browse Materials";
   }, []);
 
   useEffect(() => {

@@ -47,7 +47,7 @@ export default function StudentDashboard() {
   const [loadingStats, setLoadingStats] = useState(true);
 
   useEffect(() => {
-    document.title = "UniLibrary | Dashboard";
+    document.title = "GoLibrary | Dashboard";
   }, []);
 
   useEffect(() => {

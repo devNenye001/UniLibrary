@@ -14,7 +14,7 @@ export default function SearchResults() {
   const query = useMemo(() => new URLSearchParams(location.search).get("q") || "", [location.search]);
 
   useEffect(() => {
-    document.title = "UniLibrary | Search";
+    document.title = "GoLibrary | Search";
   }, []);
 
   useEffect(() => {
@@ -51,7 +51,7 @@ export default function SearchResults() {
             </div>
             <div>
               <h1 className="text-3xl font-semibold text-slate-900">
-                {query ? `Results for "${query}"` : "Search the UniLibrary archive"}
+                {query ? `Results for "${query}"` : "Search the GoLibrary archive"}
               </h1>
             </div>
           </div>

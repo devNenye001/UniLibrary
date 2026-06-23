@@ -53,7 +53,7 @@ export default function LecturerDashboard() {
   const [loadingMaterials, setLoadingMaterials] = useState(true);
 
   useEffect(() => {
-    document.title = "UniLibrary | Lecturer Dashboard";
+    document.title = "GoLibrary | Lecturer Dashboard";
   }, []);
 
   useEffect(() => {
@@ -104,7 +104,7 @@ export default function LecturerDashboard() {
               <span className="text-sky-200">{user?.name?.split(" ")[0] || "Lecturer"}</span>.
             </h1>
             <p className="mt-4 max-w-lg text-sm leading-7 text-slate-300">
-              Manage your uploaded materials, track downloads, and contribute to the UniLibrary
+              Manage your uploaded materials, track downloads, and contribute to the GoLibrary
               academic archive.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">

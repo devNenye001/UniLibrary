@@ -67,7 +67,7 @@ export default function MaterialDetail() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    document.title = "UniLibrary | Material Detail";
+    document.title = "GoLibrary | Material Detail";
   }, []);
 
   useEffect(() => {

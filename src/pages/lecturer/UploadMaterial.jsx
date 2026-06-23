@@ -72,7 +72,7 @@ export default function UploadMaterial() {
   const timerRef = useRef(null);
 
   useEffect(() => {
-    document.title = "UniLibrary | Upload Material";
+    document.title = "GoLibrary | Upload Material";
     return () => clearInterval(timerRef.current);
   }, []);
 
@@ -195,7 +195,7 @@ export default function UploadMaterial() {
           <div className="mb-8">
             <h1 className="text-3xl font-semibold text-slate-900">Upload Material</h1>
             <p className="mt-2 text-sm leading-7 text-slate-500">
-              Upload lecture notes, past questions, and study guides to the UniLibrary archive.
+              Upload lecture notes, past questions, and study guides to the GoLibrary archive.
               All materials require admin approval before becoming publicly visible.
             </p>
           </div>

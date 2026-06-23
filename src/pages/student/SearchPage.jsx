@@ -46,7 +46,7 @@ export default function SearchPage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    document.title = "UniLibrary | Search";
+    document.title = "GoLibrary | Search";
   }, []);
 
   useEffect(() => {

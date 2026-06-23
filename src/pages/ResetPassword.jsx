@@ -28,7 +28,7 @@ export default function ResetPassword() {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    document.title = "UniLibrary | Reset Password";
+    document.title = "GoLibrary | Reset Password";
   }, []);
 
   const validate = () => {
@@ -78,7 +78,7 @@ export default function ResetPassword() {
 
   return (
     <AuthLayout
-      heading="Create a new UniLibrary password."
+      heading="Create a new GoLibrary password."
       description="Use your secure reset link to restore access to your digital library account."
       features={LEFT_FEATURES}
       gridCols="md:grid-cols-[1.1fr_0.9fr]"

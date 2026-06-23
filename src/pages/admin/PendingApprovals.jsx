@@ -27,7 +27,7 @@ export default function PendingApprovals() {
   const [rejectTarget, setRejectTarget] = useState(null);
 
   useEffect(() => {
-    document.title = "UniLibrary | Pending Approvals";
+    document.title = "GoLibrary | Pending Approvals";
   }, []);
 
   useEffect(() => {

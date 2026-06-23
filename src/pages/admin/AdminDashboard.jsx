@@ -26,7 +26,7 @@ export default function AdminDashboard() {
   const [loadingUsers, setLoadingUsers] = useState(true);
 
   useEffect(() => {
-    document.title = "UniLibrary | Admin Dashboard";
+    document.title = "GoLibrary | Admin Dashboard";
   }, []);
 
   useEffect(() => {
@@ -97,7 +97,7 @@ export default function AdminDashboard() {
     <div className="p-8">
       <AdminPageHeader
         title="Admin Dashboard"
-        description="Overview of user activity, pending reviews, and the current state of the UniLibrary platform."
+        description="Overview of user activity, pending reviews, and the current state of the GoLibrary platform."
         actions={[
           <Link
             key="users"

@@ -209,7 +209,7 @@ export default function AnalyticsDashboard() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    document.title = "UniLibrary | Analytics";
+    document.title = "GoLibrary | Analytics";
   }, []);
 
   useEffect(() => {

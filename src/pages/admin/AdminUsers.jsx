@@ -84,7 +84,7 @@ export default function AdminUsers() {
   const [filters, setFilters] = useState({ role: "all", status: "all" });
 
   useEffect(() => {
-    document.title = "UniLibrary | User Management";
+    document.title = "GoLibrary | User Management";
   }, []);
 
   useEffect(() => {

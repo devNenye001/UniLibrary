@@ -9,7 +9,7 @@ export default function AdminPanel() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    document.title = "UniLibrary | Admin Panel";
+    document.title = "GoLibrary | Admin Panel";
   }, []);
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export default function AdminPanel() {
       <Navbar />
       <main className="mx-auto max-w-7xl px-6 py-10">
         <section className="rounded-4xl border border-slate-200 bg-white p-8 shadow-sm">
-          <h1 className="text-4xl font-semibold text-slate-900">Platform oversight for UniLibrary</h1>
+          <h1 className="text-4xl font-semibold text-slate-900">Platform oversight for GoLibrary</h1>
           <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-500">
             Review document coverage, monitor uploads, and inspect the current academic archive from one administrative control surface.
           </p>
