@@ -9,12 +9,16 @@ import {
   IoSearchOutline,
   IoTimeOutline,
   IoCloseOutline,
+  IoCloudUploadOutline,
+  IoDocumentTextOutline,
 } from "react-icons/io5";
 import { useAuth } from "../../context/AuthContext.jsx";
 
 const NAV_ITEMS = [
   { label: "Dashboard", to: "/dashboard", icon: IoGridOutline },
   { label: "Browse Materials", to: "/browse", icon: IoLibraryOutline },
+  { label: "Upload Material", to: "/student/upload", icon: IoCloudUploadOutline },
+  { label: "My Uploads", to: "/student/uploads", icon: IoDocumentTextOutline },
   { label: "My History", to: "/history", icon: IoTimeOutline },
   { label: "Chatbot", to: "/chat", icon: IoChatbubblesOutline },
 ];

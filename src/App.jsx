@@ -30,6 +30,8 @@ import MaterialDetail from "./pages/student/MaterialDetail";
 import MyHistory from "./pages/student/MyHistory";
 import SearchPage from "./pages/student/SearchPage";
 import StudentDashboard from "./pages/student/StudentDashboard";
+import StudentUploadMaterial from "./pages/student/UploadMaterial";
+import StudentMyUploads from "./pages/student/MyUploads";
 import Upload from "./pages/Upload";
 
 function AuthenticatedWidgets() {
@@ -56,6 +58,22 @@ function AnimatedRoutes() {
           element={
             <ProtectedRoute allowedRoles={["student"]}>
               <PageWrapper><StudentDashboard /></PageWrapper>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/student/upload"
+          element={
+            <ProtectedRoute allowedRoles={["student"]}>
+              <PageWrapper><StudentUploadMaterial /></PageWrapper>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/student/uploads"
+          element={
+            <ProtectedRoute allowedRoles={["student"]}>
+              <PageWrapper><StudentMyUploads /></PageWrapper>
             </ProtectedRoute>
           }
         />
